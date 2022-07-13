@@ -18,7 +18,7 @@ import java.util.List;
  * Created by macro on 2018/11/16.
  */
 @Controller
-@Api(tags = "SmsFlashPromotionProductRelationController", description = "限时购和商品关系管理")
+@Api(tags = "限时购和商品关系管理", description = "限时购和商品关系管理")
 @RequestMapping("/flashProductRelation")
 public class SmsFlashPromotionProductRelationController {
     @Autowired

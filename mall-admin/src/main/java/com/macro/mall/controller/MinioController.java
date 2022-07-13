@@ -25,7 +25,7 @@ import java.util.Date;
  * MinIO对象存储管理Controller
  * Created by macro on 2019/12/25.
  */
-@Api(tags = "MinioController", description = "MinIO对象存储管理")
+@Api(tags = "MinIO对象存储管理", description = "MinIO对象存储管理")
 @Controller
 @RequestMapping("/minio")
 public class MinioController {

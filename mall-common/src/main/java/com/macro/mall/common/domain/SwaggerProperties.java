@@ -44,4 +44,9 @@ public class SwaggerProperties {
      * 文档联系人邮箱
      */
     private String contactEmail;
+
+    /**
+     * 是否展示swagger接口
+     */
+    private boolean showSwagger;
 }

@@ -2,6 +2,7 @@ package com.macro.mall.config;
 
 import com.macro.mall.common.config.BaseSwaggerConfig;
 import com.macro.mall.common.domain.SwaggerProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -13,6 +14,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig extends BaseSwaggerConfig {
 
+    @Value("${swagger.show}")
+    private boolean swaggerShow;
+
     @Override
     public SwaggerProperties swaggerProperties() {
         return SwaggerProperties.builder()
@@ -22,6 +26,7 @@ public class SwaggerConfig extends BaseSwaggerConfig {
                 .contactName("macro")
                 .version("1.0")
                 .enableSecurity(true)
+                .showSwagger(swaggerShow)
                 .build();
     }
 }

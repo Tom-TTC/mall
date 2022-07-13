@@ -30,7 +30,7 @@ redis:
 secure:
   ignored:
     urls: #安全路径白名单
-      - /swagger-ui.html
+      - /doc.html
       - /swagger-resources/**
       - /swagger/**
       - /**/v2/api-docs
@@ -65,3 +65,6 @@ minio:
   bucketName: mall #存储桶名称
   accessKey: minioadmin #访问的key
   secretKey: minioadmin #访问的秘钥
+
+swagger:
+  show: false

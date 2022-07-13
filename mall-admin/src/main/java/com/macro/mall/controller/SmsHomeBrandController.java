@@ -17,7 +17,7 @@ import java.util.List;
  * Created by macro on 2018/11/6.
  */
 @Controller
-@Api(tags = "SmsHomeBrandController", description = "首页品牌管理")
+@Api(tags = "首页品牌管理", description = "首页品牌管理")
 @RequestMapping("/home/brand")
 public class SmsHomeBrandController {
     @Autowired

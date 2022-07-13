@@ -17,7 +17,7 @@ import java.util.List;
  * Created by macro on 2018/11/6.
  */
 @Controller
-@Api(tags = "SmsHomeRecommendSubjectController", description = "首页专题推荐管理")
+@Api(tags = "首页专题推荐管理", description = "首页专题推荐管理")
 @RequestMapping("/home/recommendSubject")
 public class SmsHomeRecommendSubjectController {
     @Autowired

@@ -20,7 +20,7 @@ import java.util.List;
  * Created by macro on 2018/6/1.
  */
 @Controller
-@Api(tags = "CmsSubjectController", description = "商品专题管理")
+@Api(tags = "商品专题管理", description = "商品专题管理")
 @RequestMapping("/subject")
 public class CmsSubjectController {
     @Autowired
