@@ -18,6 +18,7 @@ jwt:
 secure:
   ignored:
     urls: #安全路径白名单
+      - /doc.html
       - /swagger-ui.html
       - /swagger-resources/**
       - /swagger/**

@@ -16,7 +16,7 @@ mybatis:
 jwt:
   tokenHeader: Authorization #JWT存储的请求头
   secret: mall-admin-secret #JWT加解密使用的密钥
-  expiration: 604800 #JWT的超期限时间(60*60*24*7)
+  expiration: ${admin-token-expires:3600} #JWT的超期限时间 设置为1个小时
   tokenHead: 'Bearer '  #JWT负载中拿到开头
 
 redis:
@@ -24,8 +24,10 @@ redis:
   key:
     admin: 'ums:admin'
     resourceList: 'ums:resourceList'
+    admin-token: 'ums:token'
   expire:
     common: 86400 # 24小时
+    admin-token: ${admin-token-expires}
 
 secure:
   ignored:
@@ -42,6 +44,7 @@ secure:
       - /actuator/**
       - /druid/**
       - /admin/login
+      - /admin/refreshToken
       - /admin/register
       - /admin/info
       - /admin/logout
