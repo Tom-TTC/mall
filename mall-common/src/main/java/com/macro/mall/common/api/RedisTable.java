@@ -12,10 +12,12 @@ public enum RedisTable {
     UmsAdminToken("ums:token","后台用户token"),
     UmsAdminUserToken("ums:user-token","后台用户与token对应关系"),
 
+
     UmsAuthCode("ums:authCode","验证码"),
     UmsMember("ums:member","订单id"),
 
     OmsOrderId("oms:orderId","订单id"),
+    PmsProductCategory("pms:categoryId","商品类型id"),
 
     ;
 

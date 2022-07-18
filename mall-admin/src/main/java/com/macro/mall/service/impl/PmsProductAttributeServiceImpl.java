@@ -2,8 +2,8 @@ package com.macro.mall.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.macro.mall.dao.PmsProductAttributeDao;
-import com.macro.mall.dto.PmsProductAttributeParam;
-import com.macro.mall.dto.ProductAttrInfo;
+import com.macro.mall.domain.dto.PmsProductAttributeParam;
+import com.macro.mall.domain.dto.ProductAttrInfo;
 import com.macro.mall.mapper.PmsProductAttributeCategoryMapper;
 import com.macro.mall.mapper.PmsProductAttributeMapper;
 import com.macro.mall.model.PmsProductAttribute;

@@ -1,7 +1,7 @@
 package com.macro.mall.service;
 
-import com.macro.mall.dto.PmsProductCategoryParam;
-import com.macro.mall.dto.PmsProductCategoryWithChildrenItem;
+import com.macro.mall.domain.dto.PmsProductCategoryParam;
+import com.macro.mall.domain.dto.PmsProductCategoryWithChildrenItem;
 import com.macro.mall.model.PmsProductCategory;
 import org.springframework.transaction.annotation.Transactional;
 

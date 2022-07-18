@@ -1,7 +1,7 @@
 package com.macro.mall.dao;
 
-import com.macro.mall.dto.OmsOrderReturnApplyResult;
-import com.macro.mall.dto.OmsReturnApplyQueryParam;
+import com.macro.mall.domain.dto.OmsOrderReturnApplyResult;
+import com.macro.mall.domain.dto.OmsReturnApplyQueryParam;
 import com.macro.mall.model.OmsOrderReturnApply;
 import org.apache.ibatis.annotations.Param;
 

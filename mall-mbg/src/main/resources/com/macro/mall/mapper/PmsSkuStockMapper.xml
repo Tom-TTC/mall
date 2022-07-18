@@ -3,16 +3,13 @@
 <mapper namespace="com.macro.mall.mapper.PmsSkuStockMapper">
   <resultMap id="BaseResultMap" type="com.macro.mall.model.PmsSkuStock">
     <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="sku_name" jdbcType="VARCHAR" property="skuName" />
     <result column="product_id" jdbcType="BIGINT" property="productId" />
     <result column="sku_code" jdbcType="VARCHAR" property="skuCode" />
     <result column="price" jdbcType="DECIMAL" property="price" />
-    <result column="stock" jdbcType="INTEGER" property="stock" />
-    <result column="low_stock" jdbcType="INTEGER" property="lowStock" />
+    <result column="rebate_rate" jdbcType="INTEGER" property="rebateRate" />
     <result column="pic" jdbcType="VARCHAR" property="pic" />
-    <result column="sale" jdbcType="INTEGER" property="sale" />
-    <result column="promotion_price" jdbcType="DECIMAL" property="promotionPrice" />
-    <result column="lock_stock" jdbcType="INTEGER" property="lockStock" />
-    <result column="sp_data" jdbcType="VARCHAR" property="spData" />
+    <result column="order" jdbcType="TINYINT" property="order" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -73,8 +70,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, product_id, sku_code, price, stock, low_stock, pic, sale, promotion_price, lock_stock, 
-    sp_data
+    id, sku_name, product_id, sku_code, price, rebate_rate, pic, order
   </sql>
   <select id="selectByExample" parameterType="com.macro.mall.model.PmsSkuStockExample" resultMap="BaseResultMap">
     select
@@ -110,14 +106,12 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into pms_sku_stock (product_id, sku_code, price, 
-      stock, low_stock, pic, 
-      sale, promotion_price, lock_stock, 
-      sp_data)
-    values (#{productId,jdbcType=BIGINT}, #{skuCode,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, 
-      #{stock,jdbcType=INTEGER}, #{lowStock,jdbcType=INTEGER}, #{pic,jdbcType=VARCHAR}, 
-      #{sale,jdbcType=INTEGER}, #{promotionPrice,jdbcType=DECIMAL}, #{lockStock,jdbcType=INTEGER}, 
-      #{spData,jdbcType=VARCHAR})
+    insert into pms_sku_stock (sku_name, product_id, sku_code, 
+      price, rebate_rate, pic, 
+      order)
+    values (#{skuName,jdbcType=VARCHAR}, #{productId,jdbcType=BIGINT}, #{skuCode,jdbcType=VARCHAR}, 
+      #{price,jdbcType=DECIMAL}, #{rebateRate,jdbcType=INTEGER}, #{pic,jdbcType=VARCHAR}, 
+      #{order,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.macro.mall.model.PmsSkuStock">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -125,6 +119,9 @@
     </selectKey>
     insert into pms_sku_stock
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="skuName != null">
+        sku_name,
+      </if>
       <if test="productId != null">
         product_id,
       </if>
@@ -134,29 +131,20 @@
       <if test="price != null">
         price,
       </if>
-      <if test="stock != null">
-        stock,
-      </if>
-      <if test="lowStock != null">
-        low_stock,
+      <if test="rebateRate != null">
+        rebate_rate,
       </if>
       <if test="pic != null">
         pic,
       </if>
-      <if test="sale != null">
-        sale,
-      </if>
-      <if test="promotionPrice != null">
-        promotion_price,
-      </if>
-      <if test="lockStock != null">
-        lock_stock,
-      </if>
-      <if test="spData != null">
-        sp_data,
+      <if test="order != null">
+        order,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="skuName != null">
+        #{skuName,jdbcType=VARCHAR},
+      </if>
       <if test="productId != null">
         #{productId,jdbcType=BIGINT},
       </if>
@@ -166,26 +154,14 @@
       <if test="price != null">
         #{price,jdbcType=DECIMAL},
       </if>
-      <if test="stock != null">
-        #{stock,jdbcType=INTEGER},
-      </if>
-      <if test="lowStock != null">
-        #{lowStock,jdbcType=INTEGER},
+      <if test="rebateRate != null">
+        #{rebateRate,jdbcType=INTEGER},
       </if>
       <if test="pic != null">
         #{pic,jdbcType=VARCHAR},
       </if>
-      <if test="sale != null">
-        #{sale,jdbcType=INTEGER},
-      </if>
-      <if test="promotionPrice != null">
-        #{promotionPrice,jdbcType=DECIMAL},
-      </if>
-      <if test="lockStock != null">
-        #{lockStock,jdbcType=INTEGER},
-      </if>
-      <if test="spData != null">
-        #{spData,jdbcType=VARCHAR},
+      <if test="order != null">
+        #{order,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -201,6 +177,9 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
+      <if test="record.skuName != null">
+        sku_name = #{record.skuName,jdbcType=VARCHAR},
+      </if>
       <if test="record.productId != null">
         product_id = #{record.productId,jdbcType=BIGINT},
       </if>
@@ -210,26 +189,14 @@
       <if test="record.price != null">
         price = #{record.price,jdbcType=DECIMAL},
       </if>
-      <if test="record.stock != null">
-        stock = #{record.stock,jdbcType=INTEGER},
-      </if>
-      <if test="record.lowStock != null">
-        low_stock = #{record.lowStock,jdbcType=INTEGER},
+      <if test="record.rebateRate != null">
+        rebate_rate = #{record.rebateRate,jdbcType=INTEGER},
       </if>
       <if test="record.pic != null">
         pic = #{record.pic,jdbcType=VARCHAR},
       </if>
-      <if test="record.sale != null">
-        sale = #{record.sale,jdbcType=INTEGER},
-      </if>
-      <if test="record.promotionPrice != null">
-        promotion_price = #{record.promotionPrice,jdbcType=DECIMAL},
-      </if>
-      <if test="record.lockStock != null">
-        lock_stock = #{record.lockStock,jdbcType=INTEGER},
-      </if>
-      <if test="record.spData != null">
-        sp_data = #{record.spData,jdbcType=VARCHAR},
+      <if test="record.order != null">
+        order = #{record.order,jdbcType=TINYINT},
       </if>
     </set>
     <if test="_parameter != null">
@@ -239,16 +206,13 @@
   <update id="updateByExample" parameterType="map">
     update pms_sku_stock
     set id = #{record.id,jdbcType=BIGINT},
+      sku_name = #{record.skuName,jdbcType=VARCHAR},
       product_id = #{record.productId,jdbcType=BIGINT},
       sku_code = #{record.skuCode,jdbcType=VARCHAR},
       price = #{record.price,jdbcType=DECIMAL},
-      stock = #{record.stock,jdbcType=INTEGER},
-      low_stock = #{record.lowStock,jdbcType=INTEGER},
+      rebate_rate = #{record.rebateRate,jdbcType=INTEGER},
       pic = #{record.pic,jdbcType=VARCHAR},
-      sale = #{record.sale,jdbcType=INTEGER},
-      promotion_price = #{record.promotionPrice,jdbcType=DECIMAL},
-      lock_stock = #{record.lockStock,jdbcType=INTEGER},
-      sp_data = #{record.spData,jdbcType=VARCHAR}
+      order = #{record.order,jdbcType=TINYINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -256,6 +220,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.macro.mall.model.PmsSkuStock">
     update pms_sku_stock
     <set>
+      <if test="skuName != null">
+        sku_name = #{skuName,jdbcType=VARCHAR},
+      </if>
       <if test="productId != null">
         product_id = #{productId,jdbcType=BIGINT},
       </if>
@@ -265,42 +232,27 @@
       <if test="price != null">
         price = #{price,jdbcType=DECIMAL},
       </if>
-      <if test="stock != null">
-        stock = #{stock,jdbcType=INTEGER},
-      </if>
-      <if test="lowStock != null">
-        low_stock = #{lowStock,jdbcType=INTEGER},
+      <if test="rebateRate != null">
+        rebate_rate = #{rebateRate,jdbcType=INTEGER},
       </if>
       <if test="pic != null">
         pic = #{pic,jdbcType=VARCHAR},
       </if>
-      <if test="sale != null">
-        sale = #{sale,jdbcType=INTEGER},
-      </if>
-      <if test="promotionPrice != null">
-        promotion_price = #{promotionPrice,jdbcType=DECIMAL},
-      </if>
-      <if test="lockStock != null">
-        lock_stock = #{lockStock,jdbcType=INTEGER},
-      </if>
-      <if test="spData != null">
-        sp_data = #{spData,jdbcType=VARCHAR},
+      <if test="order != null">
+        order = #{order,jdbcType=TINYINT},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.macro.mall.model.PmsSkuStock">
     update pms_sku_stock
-    set product_id = #{productId,jdbcType=BIGINT},
+    set sku_name = #{skuName,jdbcType=VARCHAR},
+      product_id = #{productId,jdbcType=BIGINT},
       sku_code = #{skuCode,jdbcType=VARCHAR},
       price = #{price,jdbcType=DECIMAL},
-      stock = #{stock,jdbcType=INTEGER},
-      low_stock = #{lowStock,jdbcType=INTEGER},
+      rebate_rate = #{rebateRate,jdbcType=INTEGER},
       pic = #{pic,jdbcType=VARCHAR},
-      sale = #{sale,jdbcType=INTEGER},
-      promotion_price = #{promotionPrice,jdbcType=DECIMAL},
-      lock_stock = #{lockStock,jdbcType=INTEGER},
-      sp_data = #{spData,jdbcType=VARCHAR}
+      order = #{order,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

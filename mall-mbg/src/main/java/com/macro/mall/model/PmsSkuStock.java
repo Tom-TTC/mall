@@ -1,39 +1,36 @@
 package com.macro.mall.model;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+@Builder
 public class PmsSkuStock implements Serializable {
+    @ApiModelProperty(value = "id")
     private Long id;
 
+    @ApiModelProperty(value = "sku名称")
+    private String skuName;
+
+    @ApiModelProperty(value = "商品id")
     private Long productId;
 
     @ApiModelProperty(value = "sku编码")
     private String skuCode;
 
+    @ApiModelProperty(value = "价格")
     private BigDecimal price;
 
-    @ApiModelProperty(value = "库存")
-    private Integer stock;
-
-    @ApiModelProperty(value = "预警库存")
-    private Integer lowStock;
+    @ApiModelProperty(value = "佣金比例")
+    private Integer rebateRate;
 
     @ApiModelProperty(value = "展示图片")
     private String pic;
 
-    @ApiModelProperty(value = "销量")
-    private Integer sale;
-
-    @ApiModelProperty(value = "单品促销价格")
-    private BigDecimal promotionPrice;
-
-    @ApiModelProperty(value = "锁定库存")
-    private Integer lockStock;
-
-    @ApiModelProperty(value = "商品销售属性，json格式")
-    private String spData;
+    @ApiModelProperty(value = "排序")
+    private Byte order;
 
     private static final long serialVersionUID = 1L;
 
@@ -43,6 +40,14 @@ public class PmsSkuStock implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getSkuName() {
+        return skuName;
+    }
+
+    public void setSkuName(String skuName) {
+        this.skuName = skuName;
     }
 
     public Long getProductId() {
@@ -69,20 +74,12 @@ public class PmsSkuStock implements Serializable {
         this.price = price;
     }
 
-    public Integer getStock() {
-        return stock;
+    public Integer getRebateRate() {
+        return rebateRate;
     }
 
-    public void setStock(Integer stock) {
-        this.stock = stock;
-    }
-
-    public Integer getLowStock() {
-        return lowStock;
-    }
-
-    public void setLowStock(Integer lowStock) {
-        this.lowStock = lowStock;
+    public void setRebateRate(Integer rebateRate) {
+        this.rebateRate = rebateRate;
     }
 
     public String getPic() {
@@ -93,36 +90,12 @@ public class PmsSkuStock implements Serializable {
         this.pic = pic;
     }
 
-    public Integer getSale() {
-        return sale;
+    public Byte getOrder() {
+        return order;
     }
 
-    public void setSale(Integer sale) {
-        this.sale = sale;
-    }
-
-    public BigDecimal getPromotionPrice() {
-        return promotionPrice;
-    }
-
-    public void setPromotionPrice(BigDecimal promotionPrice) {
-        this.promotionPrice = promotionPrice;
-    }
-
-    public Integer getLockStock() {
-        return lockStock;
-    }
-
-    public void setLockStock(Integer lockStock) {
-        this.lockStock = lockStock;
-    }
-
-    public String getSpData() {
-        return spData;
-    }
-
-    public void setSpData(String spData) {
-        this.spData = spData;
+    public void setOrder(Byte order) {
+        this.order = order;
     }
 
     @Override
@@ -132,16 +105,13 @@ public class PmsSkuStock implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
+        sb.append(", skuName=").append(skuName);
         sb.append(", productId=").append(productId);
         sb.append(", skuCode=").append(skuCode);
         sb.append(", price=").append(price);
-        sb.append(", stock=").append(stock);
-        sb.append(", lowStock=").append(lowStock);
+        sb.append(", rebateRate=").append(rebateRate);
         sb.append(", pic=").append(pic);
-        sb.append(", sale=").append(sale);
-        sb.append(", promotionPrice=").append(promotionPrice);
-        sb.append(", lockStock=").append(lockStock);
-        sb.append(", spData=").append(spData);
+        sb.append(", order=").append(order);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

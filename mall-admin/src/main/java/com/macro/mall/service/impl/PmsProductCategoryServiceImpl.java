@@ -1,10 +1,12 @@
 package com.macro.mall.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.macro.mall.common.api.RedisTable;
+import com.macro.mall.common.service.TTCRedisService;
 import com.macro.mall.dao.PmsProductCategoryAttributeRelationDao;
 import com.macro.mall.dao.PmsProductCategoryDao;
-import com.macro.mall.dto.PmsProductCategoryParam;
-import com.macro.mall.dto.PmsProductCategoryWithChildrenItem;
+import com.macro.mall.domain.dto.PmsProductCategoryParam;
+import com.macro.mall.domain.dto.PmsProductCategoryWithChildrenItem;
 import com.macro.mall.mapper.PmsProductCategoryAttributeRelationMapper;
 import com.macro.mall.mapper.PmsProductCategoryMapper;
 import com.macro.mall.mapper.PmsProductMapper;
@@ -24,6 +26,11 @@ import java.util.List;
  */
 @Service
 public class PmsProductCategoryServiceImpl implements PmsProductCategoryService {
+    /**
+     * 有效分类过期时间
+     */
+    public static final long PMS_CATEGORY_TIMEOUT = 86400;
+
     @Autowired
     private PmsProductCategoryMapper productCategoryMapper;
     @Autowired
@@ -34,6 +41,9 @@ public class PmsProductCategoryServiceImpl implements PmsProductCategoryService 
     private PmsProductCategoryAttributeRelationMapper productCategoryAttributeRelationMapper;
     @Autowired
     private PmsProductCategoryDao productCategoryDao;
+    @Autowired
+    private TTCRedisService ttcRedisService;
+
     @Override
     public int create(PmsProductCategoryParam pmsProductCategoryParam) {
         PmsProductCategory productCategory = new PmsProductCategory();
@@ -44,7 +54,7 @@ public class PmsProductCategoryServiceImpl implements PmsProductCategoryService 
         int count = productCategoryMapper.insertSelective(productCategory);
         //创建筛选属性关联
         List<Long> productAttributeIdList = pmsProductCategoryParam.getProductAttributeIdList();
-        if(!CollectionUtils.isEmpty(productAttributeIdList)){
+        if (!CollectionUtils.isEmpty(productAttributeIdList)) {
             insertRelationList(productCategory.getId(), productAttributeIdList);
         }
         return count;
@@ -52,7 +62,8 @@ public class PmsProductCategoryServiceImpl implements PmsProductCategoryService 
 
     /**
      * 批量插入商品分类与筛选属性关系表
-     * @param productCategoryId 商品分类id
+     *
+     * @param productCategoryId      商品分类id
      * @param productAttributeIdList 相关商品筛选属性id集合
      */
     private void insertRelationList(Long productCategoryId, List<Long> productAttributeIdList) {
@@ -77,14 +88,14 @@ public class PmsProductCategoryServiceImpl implements PmsProductCategoryService 
         product.setProductCategoryName(productCategory.getName());
         PmsProductExample example = new PmsProductExample();
         example.createCriteria().andProductCategoryIdEqualTo(id);
-        productMapper.updateByExampleSelective(product,example);
+        productMapper.updateByExampleSelective(product, example);
         //同时更新筛选属性的信息
-        if(!CollectionUtils.isEmpty(pmsProductCategoryParam.getProductAttributeIdList())){
+        if (!CollectionUtils.isEmpty(pmsProductCategoryParam.getProductAttributeIdList())) {
             PmsProductCategoryAttributeRelationExample relationExample = new PmsProductCategoryAttributeRelationExample();
             relationExample.createCriteria().andProductCategoryIdEqualTo(id);
             productCategoryAttributeRelationMapper.deleteByExample(relationExample);
-            insertRelationList(id,pmsProductCategoryParam.getProductAttributeIdList());
-        }else{
+            insertRelationList(id, pmsProductCategoryParam.getProductAttributeIdList());
+        } else {
             PmsProductCategoryAttributeRelationExample relationExample = new PmsProductCategoryAttributeRelationExample();
             relationExample.createCriteria().andProductCategoryIdEqualTo(id);
             productCategoryAttributeRelationMapper.deleteByExample(relationExample);
@@ -108,7 +119,14 @@ public class PmsProductCategoryServiceImpl implements PmsProductCategoryService 
 
     @Override
     public PmsProductCategory getItem(Long id) {
-        return productCategoryMapper.selectByPrimaryKey(id);
+        PmsProductCategory category = (PmsProductCategory) ttcRedisService.get(RedisTable.PmsProductCategory, String.valueOf(id));
+        if (category == null) {
+            category = productCategoryMapper.selectByPrimaryKey(id);
+            if (category != null) {
+                ttcRedisService.set(RedisTable.PmsProductCategory, String.valueOf(id), category, PMS_CATEGORY_TIMEOUT);
+            }
+        }
+        return category;
     }
 
     @Override

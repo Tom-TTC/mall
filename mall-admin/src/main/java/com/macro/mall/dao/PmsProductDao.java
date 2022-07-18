@@ -1,6 +1,6 @@
 package com.macro.mall.dao;
 
-import com.macro.mall.dto.PmsProductResult;
+import com.macro.mall.domain.vo.PmsProductResponse;
 import org.apache.ibatis.annotations.Param;
 
 
@@ -12,5 +12,5 @@ public interface PmsProductDao {
     /**
      * 获取商品编辑信息
      */
-    PmsProductResult getUpdateInfo(@Param("id") Long id);
+    PmsProductResponse getProductDetail(@Param("id") Long id);
 }

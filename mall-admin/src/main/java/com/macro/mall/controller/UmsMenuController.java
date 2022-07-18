@@ -2,7 +2,7 @@ package com.macro.mall.controller;
 
 import com.macro.mall.common.api.CommonPage;
 import com.macro.mall.common.api.CommonResult;
-import com.macro.mall.dto.UmsMenuNode;
+import com.macro.mall.domain.dto.UmsMenuNode;
 import com.macro.mall.model.UmsMenu;
 import com.macro.mall.service.UmsMenuService;
 import io.swagger.annotations.Api;

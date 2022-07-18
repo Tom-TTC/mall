@@ -1,6 +1,6 @@
 package com.macro.mall.dao;
 
-import com.macro.mall.dto.SmsFlashPromotionProduct;
+import com.macro.mall.domain.dto.SmsFlashPromotionProduct;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

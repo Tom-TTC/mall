@@ -37,7 +37,16 @@
         <javaClientGenerator type="XMLMAPPER" targetPackage="com.macro.mall.mapper"
                              targetProject="mall-mbg\src\main\java"/>
         <!--生成全部表tableName设为%-->
-        <table tableName="%">
+        <!--<table tableName="%">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>-->
+        <!--<table tableName="ums_admin" domainObjectName="UmsAdmin">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="pms_product" domainObjectName="PmsProduct">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>-->
+        <table tableName="pms_sku_stock" domainObjectName="PmsSkuStock">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>

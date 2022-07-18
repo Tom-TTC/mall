@@ -2,7 +2,7 @@ package com.macro.mall.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.macro.mall.dao.SmsFlashPromotionProductRelationDao;
-import com.macro.mall.dto.SmsFlashPromotionProduct;
+import com.macro.mall.domain.dto.SmsFlashPromotionProduct;
 import com.macro.mall.mapper.SmsFlashPromotionProductRelationMapper;
 import com.macro.mall.model.SmsFlashPromotionProductRelation;
 import com.macro.mall.model.SmsFlashPromotionProductRelationExample;

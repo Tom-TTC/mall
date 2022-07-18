@@ -1,6 +1,6 @@
 package com.macro.mall.dao;
 
-import com.macro.mall.dto.PmsProductAttributeCategoryItem;
+import com.macro.mall.domain.dto.PmsProductAttributeCategoryItem;
 
 import java.util.List;
 

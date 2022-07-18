@@ -2,7 +2,7 @@ package com.macro.mall.controller;
 
 import com.macro.mall.common.api.CommonPage;
 import com.macro.mall.common.api.CommonResult;
-import com.macro.mall.dto.PmsProductAttributeCategoryItem;
+import com.macro.mall.domain.dto.PmsProductAttributeCategoryItem;
 import com.macro.mall.model.PmsProductAttributeCategory;
 import com.macro.mall.service.PmsProductAttributeCategoryService;
 import io.swagger.annotations.Api;

@@ -1,8 +1,11 @@
 package com.macro.mall.service;
 
-import com.macro.mall.dto.PmsProductParam;
-import com.macro.mall.dto.PmsProductQueryParam;
-import com.macro.mall.dto.PmsProductResult;
+import com.macro.mall.domain.dto.PmsProductParam;
+import com.macro.mall.domain.dto.PmsProductQueryParam;
+import com.macro.mall.domain.vo.PmsProductIds;
+import com.macro.mall.domain.vo.PmsProductPublishParam;
+import com.macro.mall.domain.vo.PmsProductResponse;
+import com.macro.mall.domain.vo.PmsProductVerifyParam;
 import com.macro.mall.model.PmsProduct;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -18,19 +21,19 @@ public interface PmsProductService {
     /**
      * 创建商品
      */
-    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
-    int create(PmsProductParam productParam);
+    @Transactional(isolation = Isolation.DEFAULT, propagation = Propagation.REQUIRED)
+    long create(PmsProductParam productParam);
 
     /**
      * 根据商品编号获取更新信息
      */
-    PmsProductResult getUpdateInfo(Long id);
+    PmsProductResponse getUpdateInfo(Long id);
 
     /**
      * 更新商品
      */
     @Transactional
-    int update(Long id, PmsProductParam productParam);
+    long update(PmsProductParam productParam);
 
     /**
      * 分页查询商品
@@ -39,17 +42,16 @@ public interface PmsProductService {
 
     /**
      * 批量修改审核状态
-     * @param ids 产品id
-     * @param verifyStatus 审核状态
-     * @param detail 审核详情
+     *
+     * @param verifyParam 审核参数
      */
     @Transactional
-    int updateVerifyStatus(List<Long> ids, Integer verifyStatus, String detail);
+    int updateVerifyStatus(PmsProductVerifyParam verifyParam);
 
     /**
      * 批量修改商品上架状态
      */
-    int updatePublishStatus(List<Long> ids, Integer publishStatus);
+    int updatePublishStatus(PmsProductPublishParam publishParam);
 
     /**
      * 批量修改商品推荐状态
@@ -64,7 +66,7 @@ public interface PmsProductService {
     /**
      * 批量删除商品
      */
-    int updateDeleteStatus(List<Long> ids, Integer deleteStatus);
+    int updateDeleteStatus(PmsProductIds productIds);
 
     /**
      * 根据商品名称或者货号模糊查询

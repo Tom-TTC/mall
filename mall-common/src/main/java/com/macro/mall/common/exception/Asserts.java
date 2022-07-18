@@ -7,11 +7,11 @@ import com.macro.mall.common.api.IErrorCode;
  * Created by macro on 2020/2/27.
  */
 public class Asserts {
-    public static void fail(String message) {
+    public static void fail(String message) throws ApiException {
         throw new ApiException(message);
     }
 
-    public static void fail(IErrorCode errorCode) {
+    public static void fail(IErrorCode errorCode) throws ApiException {
         throw new ApiException(errorCode);
     }
 }

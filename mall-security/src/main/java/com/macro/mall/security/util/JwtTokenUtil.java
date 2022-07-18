@@ -8,10 +8,10 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 
@@ -58,7 +58,7 @@ public class JwtTokenUtil {
                 .compact();
 
         //2.通过username从redis中获取旧的token，然后将旧token的过期时间设置为30s，让该token在30s内仍然有效,以完成最后的请求
-        String oldToken = (String) ttcRedisService.get(RedisTable.UmsAdminUserToken, username);
+        String oldToken = getTokenByUsername(username);
         if (!StringUtils.isEmpty(oldToken)) {
             ttcRedisService.expire(RedisTable.UmsAdminToken, oldToken, 30);
         }
@@ -190,7 +190,8 @@ public class JwtTokenUtil {
             return token;
         } else {
             //旧token从redis移除
-            ttcRedisService.del(RedisTable.UmsAdminToken, token);
+            // ttcRedisService.del(RedisTable.UmsAdminToken, token);
+            ttcRedisService.expire(RedisTable.UmsAdminToken, token, 30);
             claims.put(CLAIM_KEY_CREATED, new Date());
             return generateToken(claims);
         }
@@ -232,4 +233,5 @@ public class JwtTokenUtil {
         String token = getPureToken(bearerToken);
         ttcRedisService.del(RedisTable.UmsAdminToken, token);
     }
+
 }

@@ -2,7 +2,7 @@ package com.macro.mall.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.macro.mall.dao.PmsProductAttributeCategoryDao;
-import com.macro.mall.dto.PmsProductAttributeCategoryItem;
+import com.macro.mall.domain.dto.PmsProductAttributeCategoryItem;
 import com.macro.mall.mapper.PmsProductAttributeCategoryMapper;
 import com.macro.mall.model.PmsProductAttributeCategory;
 import com.macro.mall.model.PmsProductAttributeCategoryExample;

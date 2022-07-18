@@ -1,7 +1,7 @@
 package com.macro.mall.service;
 
-import com.macro.mall.dto.UmsAdminParam;
-import com.macro.mall.dto.UpdateAdminPasswordParam;
+import com.macro.mall.domain.dto.UmsAdminParam;
+import com.macro.mall.domain.dto.UpdateAdminPasswordParam;
 import com.macro.mall.model.UmsAdmin;
 import com.macro.mall.model.UmsResource;
 import com.macro.mall.model.UmsRole;

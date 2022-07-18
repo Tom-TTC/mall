@@ -2,9 +2,9 @@ package com.macro.mall.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.macro.mall.dao.OmsOrderReturnApplyDao;
-import com.macro.mall.dto.OmsOrderReturnApplyResult;
-import com.macro.mall.dto.OmsReturnApplyQueryParam;
-import com.macro.mall.dto.OmsUpdateStatusParam;
+import com.macro.mall.domain.dto.OmsOrderReturnApplyResult;
+import com.macro.mall.domain.dto.OmsReturnApplyQueryParam;
+import com.macro.mall.domain.dto.OmsUpdateStatusParam;
 import com.macro.mall.mapper.OmsOrderReturnApplyMapper;
 import com.macro.mall.model.OmsOrderReturnApply;
 import com.macro.mall.model.OmsOrderReturnApplyExample;
