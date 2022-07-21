@@ -1,4 +1,4 @@
-package com.macro.mall.domain.dto;
+package com.macro.mall.model;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -12,7 +12,7 @@ import javax.validation.constraints.NotEmpty;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class UmsAdminLoginParam {
+public class LoginParam {
     @NotEmpty
     @ApiModelProperty(value = "用户名",required = true)
     private String username;

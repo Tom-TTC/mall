@@ -1,8 +1,8 @@
 package com.macro.mall.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.macro.mall.common.domain.CommonConstant;
 import com.macro.mall.common.domain.ProductConstant;
 import com.macro.mall.common.utils.DateUtils;
 import io.swagger.annotations.ApiModelProperty;
@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -116,7 +115,7 @@ public class PmsProduct implements Serializable {
         this.createUserId = createUserId;
         this.detailHtml = detailHtml;
         this.productSn = productSn;
-        this.deleteStatus = ProductConstant.NOT_DELETED;
+        this.deleteStatus = CommonConstant.NOT_DELETED;
         this.publishStatus = ProductConstant.NOT_ONLINE;
         this.verifyStatus = ProductConstant.NOT_VARIFIED;
         this.createTime = DateUtils.getCurrentTime();

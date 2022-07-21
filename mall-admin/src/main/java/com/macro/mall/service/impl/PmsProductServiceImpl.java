@@ -122,8 +122,11 @@ public class PmsProductServiceImpl implements PmsProductService {
     }
 
     @Override
-    public PmsProductResponse getUpdateInfo(Long id) {
+    public PmsProductResponse getProductDetail(Long id) {
         PmsProductResponse productResponse = productDao.getProductDetail(id);
+        if (productResponse == null) {
+            Asserts.fail(ProductConstant.PRODUCT_NOT_EXISTED);
+        }
         productResponse.getSkuList().sort((s1, s2) -> s1.getOrder().compareTo(s2.getOrder()));
         PmsSkuResponse firstSku = productResponse.getSkuList().get(0);
         productResponse.setPrice(firstSku.getPrice());
@@ -134,12 +137,17 @@ public class PmsProductServiceImpl implements PmsProductService {
     public long update(PmsProductParam productParam) {
         //预处理参数
         PmsProduct product = prehandleProductParam(productParam);
-        //查询旧商品详情
-        PmsProduct oldProduct = productMapper.selectByPrimaryKey(product.getId());
-        if (oldProduct == null) {
+        //查询旧商品详情，注：此处要判断当前产品是否是当前登录用户创建（后期如果超级管理员能操作的话，还得改一下）
+        PmsProductExample productExample = new PmsProductExample();
+        productExample.createCriteria()
+                .andIdEqualTo(product.getId())
+                .andCreateUserIdEqualTo(productParam.getCreateUserId());
+        List<PmsProduct> oldProducts = productMapper.selectByExampleWithBLOBs(productExample);
+        if (CollectionUtils.isEmpty(oldProducts)) {
             //商品不存在，报错
             Asserts.fail(ProductConstant.PRODUCT_NOT_EXISTED);
         }
+        PmsProduct oldProduct = oldProducts.get(0);
         //更新属性到旧产品中（因为有些属性不让直接更新，创建人id，创建时间，各种状态等）
         oldProduct.updateProduct(product);
 
@@ -188,7 +196,7 @@ public class PmsProductServiceImpl implements PmsProductService {
         PmsProductExample example = new PmsProductExample();
         example.createCriteria()
                 .andIdIn(verifyParam.getIds())
-                .andDeleteStatusEqualTo(ProductConstant.NOT_DELETED);
+                .andDeleteStatusEqualTo(CommonConstant.NOT_DELETED);
         List<PmsProductVertifyRecord> list = new ArrayList<>();
         int count = productMapper.updateByExampleSelective(product, example);
         if (count == 0) {
@@ -214,7 +222,7 @@ public class PmsProductServiceImpl implements PmsProductService {
         PmsProduct record = new PmsProduct();
         record.setPublishStatus(publishParam.getPublishStatus());
         PmsProductExample example = new PmsProductExample();
-        example.createCriteria().andIdIn(publishParam.getIds()).andDeleteStatusEqualTo(ProductConstant.NOT_DELETED);
+        example.createCriteria().andIdIn(publishParam.getIds()).andDeleteStatusEqualTo(CommonConstant.NOT_DELETED);
         int count = productMapper.updateByExampleSelective(record, example);
         if (count == 0) {
             log.info("上、下架失败，参数：{}", publishParam);
@@ -244,11 +252,11 @@ public class PmsProductServiceImpl implements PmsProductService {
     @Override
     public int updateDeleteStatus(PmsProductIds productIds) {
         PmsProduct record = new PmsProduct();
-        record.setDeleteStatus(ProductConstant.DELETED);
+        record.setDeleteStatus(CommonConstant.DELETED);
         PmsProductExample example = new PmsProductExample();
         example.createCriteria()
                 .andIdIn(productIds.getIds())
-                .andDeleteStatusEqualTo(ProductConstant.NOT_DELETED);
+                .andDeleteStatusEqualTo(CommonConstant.NOT_DELETED);
         int count = productMapper.updateByExampleSelective(record, example);
         if (count == 0) {
             log.info("删除商品失败，参数：{}", productIds);

@@ -1,12 +1,13 @@
 package com.macro.mall.portal.service.impl;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
+import com.macro.mall.common.domain.ProductConstant;
+import com.macro.mall.common.exception.Asserts;
 import com.macro.mall.mapper.*;
 import com.macro.mall.model.*;
 import com.macro.mall.portal.dao.PortalProductDao;
-import com.macro.mall.portal.domain.PmsPortalProductDetail;
+import com.macro.mall.portal.domain.vo.PmsPortalProductDetail;
 import com.macro.mall.portal.domain.PmsProductCategoryNode;
 import com.macro.mall.portal.service.PmsPortalProductService;
 import org.springframework.beans.BeanUtils;
@@ -27,18 +28,6 @@ public class PmsPortalProductServiceImpl implements PmsPortalProductService {
     @Autowired
     private PmsProductCategoryMapper productCategoryMapper;
     @Autowired
-    private PmsBrandMapper brandMapper;
-    @Autowired
-    private PmsProductAttributeMapper productAttributeMapper;
-    @Autowired
-    private PmsProductAttributeValueMapper productAttributeValueMapper;
-    @Autowired
-    private PmsSkuStockMapper skuStockMapper;
-    @Autowired
-    private PmsProductLadderMapper productLadderMapper;
-    @Autowired
-    private PmsProductFullReductionMapper productFullReductionMapper;
-    @Autowired
     private PortalProductDao portalProductDao;
 
     @Override
@@ -49,9 +38,6 @@ public class PmsPortalProductServiceImpl implements PmsPortalProductService {
         criteria.andDeleteStatusEqualTo(0);
         if (StrUtil.isNotEmpty(keyword)) {
             criteria.andNameLike("%" + keyword + "%");
-        }
-        if (brandId != null) {
-            criteria.andBrandIdEqualTo(brandId);
         }
         if (productCategoryId != null) {
             criteria.andProductCategoryIdEqualTo(productCategoryId);
@@ -81,48 +67,10 @@ public class PmsPortalProductServiceImpl implements PmsPortalProductService {
 
     @Override
     public PmsPortalProductDetail detail(Long id) {
-        PmsPortalProductDetail result = new PmsPortalProductDetail();
-        //获取商品信息
-        PmsProduct product = productMapper.selectByPrimaryKey(id);
-        result.setProduct(product);
-        //获取品牌信息
-        PmsBrand brand = brandMapper.selectByPrimaryKey(product.getBrandId());
-        result.setBrand(brand);
-        //获取商品属性信息
-        PmsProductAttributeExample attributeExample = new PmsProductAttributeExample();
-        attributeExample.createCriteria().andProductAttributeCategoryIdEqualTo(product.getProductAttributeCategoryId());
-        List<PmsProductAttribute> productAttributeList = productAttributeMapper.selectByExample(attributeExample);
-        result.setProductAttributeList(productAttributeList);
-        //获取商品属性值信息
-        if(CollUtil.isNotEmpty(productAttributeList)){
-            List<Long> attributeIds = productAttributeList.stream().map(PmsProductAttribute::getId).collect(Collectors.toList());
-            PmsProductAttributeValueExample attributeValueExample = new PmsProductAttributeValueExample();
-            attributeValueExample.createCriteria().andProductIdEqualTo(product.getId())
-                    .andProductAttributeIdIn(attributeIds);
-            List<PmsProductAttributeValue> productAttributeValueList = productAttributeValueMapper.selectByExample(attributeValueExample);
-            result.setProductAttributeValueList(productAttributeValueList);
+        PmsPortalProductDetail result = portalProductDao.getProductDetail(id);
+        if(result==null){
+            Asserts.fail(ProductConstant.PRODUCT_NOT_EXISTED);
         }
-        //获取商品SKU库存信息
-        PmsSkuStockExample skuExample = new PmsSkuStockExample();
-        skuExample.createCriteria().andProductIdEqualTo(product.getId());
-        List<PmsSkuStock> skuStockList = skuStockMapper.selectByExample(skuExample);
-        result.setSkuStockList(skuStockList);
-        //商品阶梯价格设置
-        if(product.getPromotionType()==3){
-            PmsProductLadderExample ladderExample = new PmsProductLadderExample();
-            ladderExample.createCriteria().andProductIdEqualTo(product.getId());
-            List<PmsProductLadder> productLadderList = productLadderMapper.selectByExample(ladderExample);
-            result.setProductLadderList(productLadderList);
-        }
-        //商品满减价格设置
-        if(product.getPromotionType()==4){
-            PmsProductFullReductionExample fullReductionExample = new PmsProductFullReductionExample();
-            fullReductionExample.createCriteria().andProductIdEqualTo(product.getId());
-            List<PmsProductFullReduction> productFullReductionList = productFullReductionMapper.selectByExample(fullReductionExample);
-            result.setProductFullReductionList(productFullReductionList);
-        }
-        //商品可用优惠券
-        result.setCouponList(portalProductDao.getAvailableCouponList(product.getId(),product.getProductCategoryId()));
         return result;
     }
 

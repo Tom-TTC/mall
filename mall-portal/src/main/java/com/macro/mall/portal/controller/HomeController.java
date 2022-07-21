@@ -19,7 +19,7 @@ import java.util.List;
  * Created by macro on 2019/1/28.
  */
 @Controller
-@Api(tags = "HomeController", description = "首页内容管理")
+@Api(tags = "首页内容管理", description = "首页内容管理")
 @RequestMapping("/home")
 public class HomeController {
     @Autowired

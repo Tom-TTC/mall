@@ -16,7 +16,7 @@ import java.util.List;
  * Created by macro on 2018/8/28.
  */
 @Controller
-@Api(tags = "UmsMemberReceiveAddressController", description = "会员收货地址管理")
+@Api(tags = "会员收货地址管理", description = "会员收货地址管理")
 @RequestMapping("/member/address")
 public class UmsMemberReceiveAddressController {
     @Autowired

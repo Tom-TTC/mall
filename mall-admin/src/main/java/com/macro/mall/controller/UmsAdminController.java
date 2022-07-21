@@ -3,9 +3,9 @@ package com.macro.mall.controller;
 import cn.hutool.core.collection.CollUtil;
 import com.macro.mall.common.api.CommonPage;
 import com.macro.mall.common.api.CommonResult;
-import com.macro.mall.domain.dto.UmsAdminLoginParam;
 import com.macro.mall.domain.dto.UmsAdminParam;
 import com.macro.mall.domain.dto.UpdateAdminPasswordParam;
+import com.macro.mall.model.LoginParam;
 import com.macro.mall.model.UmsAdmin;
 import com.macro.mall.model.UmsRole;
 import com.macro.mall.service.UmsAdminService;
@@ -53,8 +53,8 @@ public class UmsAdminController {
 
     @ApiOperation(value = "登录以后返回token")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public CommonResult login(@Validated @RequestBody UmsAdminLoginParam umsAdminLoginParam) {
-        String token = adminService.login(umsAdminLoginParam.getUsername(), umsAdminLoginParam.getPassword());
+    public CommonResult login(@Validated @RequestBody LoginParam loginParam) {
+        String token = adminService.login(loginParam.getUsername(), loginParam.getPassword());
         if (token == null) {
             return CommonResult.validateFailed("用户名或密码错误");
         }

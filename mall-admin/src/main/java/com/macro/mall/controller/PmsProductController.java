@@ -10,16 +10,16 @@ import com.macro.mall.domain.vo.PmsProductPublishParam;
 import com.macro.mall.domain.vo.PmsProductResponse;
 import com.macro.mall.domain.vo.PmsProductVerifyParam;
 import com.macro.mall.model.PmsProduct;
-import com.macro.mall.service.LoginUtils;
 import com.macro.mall.service.PmsProductService;
+import com.macro.mall.service.impl.CommonService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 /**
@@ -33,10 +33,13 @@ public class PmsProductController {
     @Autowired
     private PmsProductService productService;
 
+    @Autowired
+    private CommonService commonService;
+
     @ApiOperation("创建商品")
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public CommonResult create(@Validated({Operation.Creation.class}) @RequestBody PmsProductParam productParam) {
-        Long userId = LoginUtils.getCurrentLoginUserId();
+    public CommonResult create(@Validated({Operation.Creation.class}) @RequestBody PmsProductParam productParam, Principal principal) {
+        Long userId = commonService.getLoginUserId(principal);
         productParam.setCreateUserId(userId);
         long productId = productService.create(productParam);
         if (productId > 0) {
@@ -47,15 +50,17 @@ public class PmsProductController {
     }
 
     @ApiOperation("根据商品id获取商品编辑信息")
-    @RequestMapping(value = "/updateInfo/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
     public CommonResult<PmsProductResponse> getUpdateInfo(@PathVariable Long id) {
-        PmsProductResponse productResult = productService.getUpdateInfo(id);
+        PmsProductResponse productResult = productService.getProductDetail(id);
         return CommonResult.success(productResult);
     }
 
     @ApiOperation("更新商品")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public CommonResult update(@Validated({Operation.Update.class}) @RequestBody PmsProductParam productParam) {
+    public CommonResult update(@Validated({Operation.Update.class}) @RequestBody PmsProductParam productParam, Principal principal) {
+        Long userId = commonService.getLoginUserId(principal);
+        productParam.setCreateUserId(userId);
         long productId = productService.update(productParam);
         if (productId > 0) {
             return CommonResult.success(productId);

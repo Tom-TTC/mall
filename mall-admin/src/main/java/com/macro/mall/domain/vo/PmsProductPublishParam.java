@@ -2,11 +2,10 @@ package com.macro.mall.domain.vo;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.util.List;
 
 /**
  * @author ttc
@@ -15,6 +14,7 @@ import java.util.List;
  * @desc ...
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class PmsProductPublishParam extends PmsProductIds {
 
 

@@ -32,7 +32,7 @@ public class DateUtils {
     /**
      * 序列型日期
      */
-    private static DateTimeFormatter SERIAL_TIME_PATTERN = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+    public static DateTimeFormatter SERIAL_TIME_PATTERN = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
     private static DateTimeFormatter ORDINARY_TIME_PATTERN = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private static String CHINESE_MONTH_AND_DAY_PATTERN = "%d月%d日";
 

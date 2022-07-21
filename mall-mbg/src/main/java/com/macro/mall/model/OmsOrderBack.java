@@ -6,15 +6,13 @@ import com.macro.mall.common.utils.DateUtils;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-@Accessors(chain = true)
-public class OmsOrder implements Serializable {
+public class OmsOrderBack implements Serializable {
     @ApiModelProperty(value = "订单id")
     private Long id;
 
@@ -84,7 +82,7 @@ public class OmsOrder implements Serializable {
     private static final long serialVersionUID = 1L;
 
 
-    public OmsOrder(Long productId,
+    public OmsOrderBack(Long productId,
                         Long memberId,
                         String memberUsername,
                         String wechatAccount,

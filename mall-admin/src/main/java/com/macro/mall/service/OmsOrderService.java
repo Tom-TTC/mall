@@ -1,7 +1,7 @@
 package com.macro.mall.service;
 
 import com.macro.mall.domain.dto.*;
-import com.macro.mall.model.OmsOrder;
+import com.macro.mall.model.vo.OrderDetail;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -14,29 +14,24 @@ public interface OmsOrderService {
     /**
      * 订单查询
      */
-    List<OmsOrder> list(OmsOrderQueryParam queryParam, Integer pageSize, Integer pageNum);
+    List<OrderDetail> list(OmsOrderQueryParam queryParam, Integer pageSize, Integer pageNum);
 
     /**
      * 批量发货
      */
     @Transactional
-    int delivery(List<OmsOrderDeliveryParam> deliveryParamList);
+    int handle(OmsOrderHandleParam handleParam);
 
-    /**
-     * 批量关闭订单
-     */
-    @Transactional
-    int close(List<Long> ids, String note);
 
     /**
      * 批量删除订单
      */
-    int delete(List<Long> ids);
+    int delete(List<String> orderSns);
 
     /**
      * 获取指定订单详情
      */
-    OmsOrderDetail detail(Long id);
+    OrderDetail detail(String orderSn);
 
     /**
      * 修改订单收货人信息
@@ -45,14 +40,8 @@ public interface OmsOrderService {
     int updateReceiverInfo(OmsReceiverInfoParam receiverInfoParam);
 
     /**
-     * 修改订单费用信息
-     */
-    @Transactional
-    int updateMoneyInfo(OmsMoneyInfoParam moneyInfoParam);
-
-    /**
      * 修改订单备注
      */
     @Transactional
-    int updateNote(Long id, String note, Integer status);
+    int updateNote( OmsOrderNoteParam noteParam);
 }

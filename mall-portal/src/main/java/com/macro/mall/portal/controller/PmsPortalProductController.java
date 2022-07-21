@@ -3,7 +3,7 @@ package com.macro.mall.portal.controller;
 import com.macro.mall.common.api.CommonPage;
 import com.macro.mall.common.api.CommonResult;
 import com.macro.mall.model.PmsProduct;
-import com.macro.mall.portal.domain.PmsPortalProductDetail;
+import com.macro.mall.portal.domain.vo.PmsPortalProductDetail;
 import com.macro.mall.portal.domain.PmsProductCategoryNode;
 import com.macro.mall.portal.service.PmsPortalProductService;
 import io.swagger.annotations.Api;
@@ -20,7 +20,7 @@ import java.util.List;
  * Created by macro on 2020/4/6.
  */
 @Controller
-@Api(tags = "PmsPortalProductController", description = "前台商品管理")
+@Api(tags = "前台商品管理", description = "前台商品管理")
 @RequestMapping("/product")
 public class PmsPortalProductController {
 

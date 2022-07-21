@@ -1,17 +1,28 @@
 package com.macro.mall.service.impl;
 
+import afu.org.checkerframework.checker.oigj.qual.O;
+import cn.hutool.log.Log;
 import com.github.pagehelper.PageHelper;
+import com.google.common.collect.Lists;
+import com.macro.mall.common.domain.OrderConstant;
+import com.macro.mall.common.exception.Asserts;
+import com.macro.mall.common.utils.DateUtils;
 import com.macro.mall.dao.OmsOrderDao;
 import com.macro.mall.dao.OmsOrderOperateHistoryDao;
+import com.macro.mall.domain.bo.AdminUserDetails;
 import com.macro.mall.domain.dto.*;
 import com.macro.mall.mapper.OmsOrderMapper;
 import com.macro.mall.mapper.OmsOrderOperateHistoryMapper;
 import com.macro.mall.model.OmsOrder;
 import com.macro.mall.model.OmsOrderExample;
 import com.macro.mall.model.OmsOrderOperateHistory;
+import com.macro.mall.model.UmsAdmin;
+import com.macro.mall.model.vo.OrderDetail;
+import com.macro.mall.service.LoginUtils;
 import com.macro.mall.service.OmsOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -33,121 +44,138 @@ public class OmsOrderServiceImpl implements OmsOrderService {
     private OmsOrderOperateHistoryMapper orderOperateHistoryMapper;
 
     @Override
-    public List<OmsOrder> list(OmsOrderQueryParam queryParam, Integer pageSize, Integer pageNum) {
+    public List<OrderDetail> list(OmsOrderQueryParam queryParam, Integer pageSize, Integer pageNum) {
+        //1.填充管理员id（管理员只能查自己商铺的订单，后面超级管理员，再考虑方案）
+        Long adminId = LoginUtils.getCurrentLoginUserId();
+        queryParam.setAdminId(adminId);
         PageHelper.startPage(pageNum, pageSize);
-        return orderDao.getList(queryParam);
+        return orderDao.getOrderList(queryParam);
     }
 
+    /**
+     * 处理订单：同样寄样或者拒绝寄样
+     *
+     * @param handleParam
+     * @return
+     */
     @Override
-    public int delivery(List<OmsOrderDeliveryParam> deliveryParamList) {
+    public int handle(OmsOrderHandleParam handleParam) {
+        //订单当前状态必须是待处理
+        handleParam.setCurrentStatusList(OrderConstant.ORDER_TO_BE_CONFIRMED + "");
+        AdminUserDetails userDetails = checkAdminOrder(handleParam);
+
         //批量发货
-        int count = orderDao.delivery(deliveryParamList);
+        int count = orderDao.delivery(handleParam);
         //添加操作记录
-        List<OmsOrderOperateHistory> operateHistoryList = deliveryParamList.stream()
-                .map(omsOrderDeliveryParam -> {
-                    OmsOrderOperateHistory history = new OmsOrderOperateHistory();
-                    history.setOrderId(omsOrderDeliveryParam.getOrderId());
-                    history.setCreateTime(new Date());
-                    history.setOperateMan("后台管理员");
-                    history.setOrderStatus(2);
-                    history.setNote("完成发货");
-                    return history;
-                }).collect(Collectors.toList());
-        orderOperateHistoryDao.insertList(operateHistoryList);
+        String note = handleParam.getOrderStatus() == OrderConstant.ORDER_HANDLED ? OrderConstant.ACCEPT_DELIVERY : OrderConstant.DENY_DELIVERY;
+        logOrderOperation(handleParam.getOrderSn(), userDetails.getUsername(), handleParam.getOrderStatus(), note);
         return count;
     }
 
-    @Override
-    public int close(List<Long> ids, String note) {
-        OmsOrder record = new OmsOrder();
-        record.setStatus(4);
-        OmsOrderExample example = new OmsOrderExample();
-        example.createCriteria().andDeleteStatusEqualTo(0).andIdIn(ids);
-        int count = orderMapper.updateByExampleSelective(record, example);
-        List<OmsOrderOperateHistory> historyList = ids.stream().map(orderId -> {
-            OmsOrderOperateHistory history = new OmsOrderOperateHistory();
-            history.setOrderId(orderId);
-            history.setCreateTime(new Date());
-            history.setOperateMan("后台管理员");
-            history.setOrderStatus(4);
-            history.setNote("订单关闭:"+note);
-            return history;
-        }).collect(Collectors.toList());
-        orderOperateHistoryDao.insertList(historyList);
-        return count;
+    /**
+     * 校验管理员是否可以处理该订单
+     *
+     * @param handleParam
+     */
+    private AdminUserDetails checkAdminOrder(OmsOrderHandleParam handleParam) {
+        AdminUserDetails userDetails = LoginUtils.getCurrentLoginUser();
+        handleParam.setAdminId(userDetails.getUmsAdmin().getId());
+        int orderCount = orderDao.countMyOrder(handleParam);
+        if (orderCount == 0) {
+            Asserts.fail(OrderConstant.ORDER_NOT_EXIST_OR_INVALID);
+        }
+        return userDetails;
     }
 
+    /**
+     * 做操作记录
+     */
+    private void logOrderOperation(String orderSn, String adminName, Integer orderStatus, String note) {
+        OmsOrderOperateHistory history = new OmsOrderOperateHistory();
+        history.setOrderSn(orderSn);
+        history.setCreateTime(DateUtils.getCurrentTime());
+        history.setOperateMan(adminName);
+        history.setOrderStatus(orderStatus);
+        history.setNote(note);
+        orderOperateHistoryDao.insertList(Lists.newArrayList(history));
+    }
+
+
     @Override
-    public int delete(List<Long> ids) {
+    public int delete(List<String> orderSns) {
+        OmsOrderHandleParam handleParam = new OmsOrderHandleParam();
+        String currentStatusList = Lists.newArrayList(OrderConstant.ORDER_CANCELLED, OrderConstant.ORDER_REFUSED, OrderConstant.ORDER_HANDLED)
+                .stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining(","));
+        handleParam.setCurrentStatusList(currentStatusList);
+        checkAdminOrder(handleParam);
+
         OmsOrder record = new OmsOrder();
         record.setDeleteStatus(1);
         OmsOrderExample example = new OmsOrderExample();
-        example.createCriteria().andDeleteStatusEqualTo(0).andIdIn(ids);
+        example.createCriteria().andDeleteStatusEqualTo(0).andOrderSnIn(orderSns);
         return orderMapper.updateByExampleSelective(record, example);
     }
 
     @Override
-    public OmsOrderDetail detail(Long id) {
-        return orderDao.getDetail(id);
+    public OrderDetail detail(String orderSn) {
+        Long adminId = LoginUtils.getCurrentLoginUserId();
+        OmsOrderQueryParam queryParam = new OmsOrderQueryParam()
+                .setOrderSn(orderSn)
+                .setAdminId(adminId);
+        List<OrderDetail> orderDetails = orderDao.getOrderList(queryParam);
+        if (CollectionUtils.isEmpty(orderDetails)) {
+            Asserts.fail(OrderConstant.ORDER_NOT_EXIST);
+        }
+        return orderDetails.get(0);
     }
 
     @Override
     public int updateReceiverInfo(OmsReceiverInfoParam receiverInfoParam) {
-        OmsOrder order = new OmsOrder();
-        order.setId(receiverInfoParam.getOrderId());
-        order.setReceiverName(receiverInfoParam.getReceiverName());
-        order.setReceiverPhone(receiverInfoParam.getReceiverPhone());
-        order.setReceiverPostCode(receiverInfoParam.getReceiverPostCode());
-        order.setReceiverDetailAddress(receiverInfoParam.getReceiverDetailAddress());
-        order.setReceiverProvince(receiverInfoParam.getReceiverProvince());
-        order.setReceiverCity(receiverInfoParam.getReceiverCity());
-        order.setReceiverRegion(receiverInfoParam.getReceiverRegion());
-        order.setModifyTime(new Date());
-        int count = orderMapper.updateByPrimaryKeySelective(order);
-        //插入操作记录
-        OmsOrderOperateHistory history = new OmsOrderOperateHistory();
-        history.setOrderId(receiverInfoParam.getOrderId());
-        history.setCreateTime(new Date());
-        history.setOperateMan("后台管理员");
-        history.setOrderStatus(receiverInfoParam.getStatus());
-        history.setNote("修改收货人信息");
-        orderOperateHistoryMapper.insert(history);
+        //1.校验管理员是否有该订单
+        OmsOrderHandleParam handleParam = new OmsOrderHandleParam();
+        String currentStatusList = Lists.newArrayList(OrderConstant.ORDER_TO_BE_CONFIRMED, OrderConstant.ORDER_HANDLED)
+                .stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining(","));
+        handleParam.setCurrentStatusList(currentStatusList);
+        AdminUserDetails user = checkAdminOrder(handleParam);
+
+        //2.更新订单
+        OmsOrderExample orderExample = new OmsOrderExample();
+        orderExample.createCriteria()
+                .andOrderSnEqualTo(receiverInfoParam.getOrderSn());
+        OmsOrder order = new OmsOrder()
+                .setReceiverName(receiverInfoParam.getReceiverName())
+                .setReceiverPhone(receiverInfoParam.getReceiverPhone())
+                .setReceiverDetailAddress(receiverInfoParam.getReceiverDetailAddress());
+        order.updateTime();
+        int count = orderMapper.updateByExampleSelective(order, orderExample);
+
+        //3.插入操作记录
+        logOrderOperation(receiverInfoParam.getOrderSn(), user.getUsername(), null, OrderConstant.UPDATE_RECEIVER_INFO);
         return count;
     }
 
     @Override
-    public int updateMoneyInfo(OmsMoneyInfoParam moneyInfoParam) {
-        OmsOrder order = new OmsOrder();
-        order.setId(moneyInfoParam.getOrderId());
-        order.setFreightAmount(moneyInfoParam.getFreightAmount());
-        order.setDiscountAmount(moneyInfoParam.getDiscountAmount());
-        order.setModifyTime(new Date());
-        int count = orderMapper.updateByPrimaryKeySelective(order);
-        //插入操作记录
-        OmsOrderOperateHistory history = new OmsOrderOperateHistory();
-        history.setOrderId(moneyInfoParam.getOrderId());
-        history.setCreateTime(new Date());
-        history.setOperateMan("后台管理员");
-        history.setOrderStatus(moneyInfoParam.getStatus());
-        history.setNote("修改费用信息");
-        orderOperateHistoryMapper.insert(history);
+    public int updateNote(OmsOrderNoteParam noteParam) {
+        //1.校验管理员是否有该订单
+        OmsOrderHandleParam handleParam = new OmsOrderHandleParam();
+        AdminUserDetails user = checkAdminOrder(handleParam);
+
+        //2.更新订单
+        OmsOrderExample orderExample = new OmsOrderExample();
+        orderExample.createCriteria()
+                .andOrderSnEqualTo(noteParam.getOrderSn());
+        OmsOrder order = new OmsOrder()
+                .setNote(noteParam.getNote());
+        order.updateTime();
+        int count = orderMapper.updateByExampleSelective(order, orderExample);
+
+        //3.插入操作记录
+        logOrderOperation(noteParam.getOrderSn(), user.getUsername(), null, OrderConstant.UPDATE_ORDER_NOTE);
         return count;
     }
 
-    @Override
-    public int updateNote(Long id, String note, Integer status) {
-        OmsOrder order = new OmsOrder();
-        order.setId(id);
-        order.setNote(note);
-        order.setModifyTime(new Date());
-        int count = orderMapper.updateByPrimaryKeySelective(order);
-        OmsOrderOperateHistory history = new OmsOrderOperateHistory();
-        history.setOrderId(id);
-        history.setCreateTime(new Date());
-        history.setOperateMan("后台管理员");
-        history.setOrderStatus(status);
-        history.setNote("修改备注信息："+note);
-        orderOperateHistoryMapper.insert(history);
-        return count;
-    }
 }

@@ -27,7 +27,7 @@ public interface PmsProductService {
     /**
      * 根据商品编号获取更新信息
      */
-    PmsProductResponse getUpdateInfo(Long id);
+    PmsProductResponse getProductDetail(Long id);
 
     /**
      * 更新商品

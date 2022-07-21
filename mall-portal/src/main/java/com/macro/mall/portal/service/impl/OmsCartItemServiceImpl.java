@@ -9,7 +9,6 @@ import com.macro.mall.portal.dao.PortalProductDao;
 import com.macro.mall.portal.domain.CartProduct;
 import com.macro.mall.portal.domain.CartPromotionItem;
 import com.macro.mall.portal.service.OmsCartItemService;
-import com.macro.mall.portal.service.OmsPromotionService;
 import com.macro.mall.portal.service.UmsMemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,8 +30,6 @@ public class OmsCartItemServiceImpl implements OmsCartItemService {
     private OmsCartItemMapper cartItemMapper;
     @Autowired
     private PortalProductDao productDao;
-    @Autowired
-    private OmsPromotionService promotionService;
     @Autowired
     private UmsMemberService memberService;
 
@@ -86,9 +83,6 @@ public class OmsCartItemServiceImpl implements OmsCartItemService {
             cartItemList = cartItemList.stream().filter(item->cartIds.contains(item.getId())).collect(Collectors.toList());
         }
         List<CartPromotionItem> cartPromotionItemList = new ArrayList<>();
-        if(!CollectionUtils.isEmpty(cartItemList)){
-            cartPromotionItemList = promotionService.calcCartPromotion(cartItemList);
-        }
         return cartPromotionItemList;
     }
 

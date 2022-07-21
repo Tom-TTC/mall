@@ -2,21 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.macro.mall.dao.PmsProductDao">
     <resultMap id="productDetail" type="com.macro.mall.domain.vo.PmsProductResponse">
-        <id column="id" jdbcType="BIGINT" property="id" />
-        <result column="product_category_id" jdbcType="BIGINT" property="productCategoryId" />
-        <result column="product_category_name" jdbcType="VARCHAR" property="productCategoryName" />
-        <result column="name" jdbcType="VARCHAR" property="name" />
-        <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
-        <result column="delete_status" jdbcType="INTEGER" property="deleteStatus" />
-        <result column="publish_status" jdbcType="INTEGER" property="publishStatus" />
-        <result column="verify_status" jdbcType="INTEGER" property="verifyStatus" />
-        <result column="price" jdbcType="DECIMAL" property="price" />
-        <result column="product_link" jdbcType="VARCHAR" property="productLink" />
-        <result column="album_pics" jdbcType="VARCHAR" property="albumPics" />
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-        <result column="detail_html" jdbcType="LONGVARCHAR" property="detailHtml" />
-        <collection property="skuList" columnPrefix="sku_" javaType="java.util.List" ofType="com.macro.mall.domain.vo.PmsSkuResponse">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="product_category_id" jdbcType="BIGINT" property="productCategoryId"/>
+        <result column="product_category_name" jdbcType="VARCHAR" property="productCategoryName"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="shop_name" jdbcType="VARCHAR" property="shopName"/>
+        <result column="publish_status" jdbcType="INTEGER" property="publishStatus"/>
+        <result column="verify_status" jdbcType="INTEGER" property="verifyStatus"/>
+        <result column="price" jdbcType="DECIMAL" property="price"/>
+        <result column="product_link" jdbcType="VARCHAR" property="productLink"/>
+        <result column="album_pics" jdbcType="VARCHAR" property="albumPics"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="detail_html" jdbcType="LONGVARCHAR" property="detailHtml"/>
+        <collection property="skuList" columnPrefix="sku_" javaType="java.util.List"
+                    ofType="com.macro.mall.domain.vo.PmsSkuResponse">
             <id property="id" column="id"/>
             <result property="price" column="price"/>
             <result property="rebateRate" column="rebate_rate"/>
@@ -27,16 +27,28 @@
 
 
     <select id="getProductDetail" resultMap="productDetail">
-        SELECT p.*,s.id sku_id,s.price sku_price,s.rebate_rate sku_rebate_rate,s.sku_name sku_sku_name,s.order sku_order
+        SELECT p.*,
+               s.id          sku_id,
+               s.price       sku_price,
+               s.rebate_rate sku_rebate_rate,
+               s.sku_name    sku_sku_name,
+               s.order       sku_order
         FROM pms_product p
-        inner JOIN pms_sku_stock s ON s.product_id = p.id
-        WHERE p.id=#{id};
+                 inner JOIN pms_sku_stock s ON s.product_id = p.id
+        WHERE p.id = #{id}
+          and p.delete_status = 0;
     </select>
-    <select id="selectSubjectProductRelationByProductId" resultMap="com.macro.mall.mapper.CmsSubjectProductRelationMapper.BaseResultMap">
-        select * from cms_subject_product_relation where product_id=#{productId}
+    <select id="selectSubjectProductRelationByProductId"
+            resultMap="com.macro.mall.mapper.CmsSubjectProductRelationMapper.BaseResultMap">
+        select *
+        from cms_subject_product_relation
+        where product_id = #{productId}
     </select>
-    <select id="selectPrefrenceAreaProductRelationByProductId" resultMap="com.macro.mall.mapper.CmsPrefrenceAreaProductRelationMapper.BaseResultMap">
-        select * from cms_prefrence_area_product_relation where product_id=#{productId}
+    <select id="selectPrefrenceAreaProductRelationByProductId"
+            resultMap="com.macro.mall.mapper.CmsPrefrenceAreaProductRelationMapper.BaseResultMap">
+        select *
+        from cms_prefrence_area_product_relation
+        where product_id = #{productId}
     </select>
 
 </mapper>

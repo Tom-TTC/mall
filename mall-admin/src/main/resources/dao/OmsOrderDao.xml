@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.macro.mall.dao.OmsOrderDao">
-    <resultMap id="orderDetailResultMap" type="com.macro.mall.domain.dto.OmsOrderDetail" extends="com.macro.mall.mapper.OmsOrderMapper.BaseResultMap">
-        <collection property="orderItemList" resultMap="com.macro.mall.mapper.OmsOrderItemMapper.BaseResultMap" columnPrefix="item_"/>
-        <collection property="historyList" resultMap="com.macro.mall.mapper.OmsOrderOperateHistoryMapper.BaseResultMap" columnPrefix="history_"/>
+    <resultMap id="orderDetailResultMap" type="com.macro.mall.domain.dto.OmsOrderDetail"
+               extends="com.macro.mall.mapper.OmsOrderMapper.BaseResultMap">
+        <collection property="orderItemList" resultMap="com.macro.mall.mapper.OmsOrderItemMapper.BaseResultMap"
+                    columnPrefix="item_"/>
+        <collection property="historyList" resultMap="com.macro.mall.mapper.OmsOrderOperateHistoryMapper.BaseResultMap"
+                    columnPrefix="history_"/>
     </resultMap>
     <select id="getList" resultMap="com.macro.mall.mapper.OmsOrderMapper.BaseResultMap">
         SELECT *
@@ -11,20 +14,8 @@
         oms_order
         WHERE
         delete_status = 0
-        <if test="queryParam.orderSn!=null and queryParam.orderSn!=''">
-            AND order_sn = #{queryParam.orderSn}
-        </if>
         <if test="queryParam.status!=null">
             AND `status` = #{queryParam.status}
-        </if>
-        <if test="queryParam.sourceType!=null">
-            AND source_type = #{queryParam.sourceType}
-        </if>
-        <if test="queryParam.orderType!=null">
-            AND order_type = #{queryParam.orderType}
-        </if>
-        <if test="queryParam.createTime!=null and queryParam.createTime!=''">
-            AND create_time LIKE concat(#{queryParam.createTime},"%")
         </if>
         <if test="queryParam.receiverKeyword!=null and queryParam.receiverKeyword!=''">
             AND (
@@ -33,58 +24,101 @@
             )
         </if>
     </select>
-    <update id="delivery">
-        UPDATE oms_order
-        SET
-        delivery_sn = CASE id
-        <foreach collection="list" item="item">
-            WHEN #{item.orderId} THEN #{item.deliverySn}
-        </foreach>
-        END,
-        delivery_company = CASE id
-        <foreach collection="list" item="item">
-            WHEN #{item.orderId} THEN #{item.deliveryCompany}
-        </foreach>
-        END,
-        delivery_time = CASE id
-        <foreach collection="list" item="item">
-            WHEN #{item.orderId} THEN now()
-        </foreach>
-        END,
-        `status` = CASE id
-        <foreach collection="list" item="item">
-            WHEN #{item.orderId} THEN 2
-        </foreach>
-        END
+
+    <resultMap id="orderDetailMap" type="com.macro.mall.model.vo.OrderDetail">
+        <result column="order_sn" jdbcType="VARCHAR" property="orderSn"/>
+        <result column="product_id" jdbcType="BIGINT" property="productId"/>
+        <result column="product_name" jdbcType="VARCHAR" property="productName"/>
+        <result column="shop_name" jdbcType="VARCHAR" property="shopName"/>
+        <result column="member_username" jdbcType="VARCHAR" property="memberUsername"/>
+        <result column="wechat_account" jdbcType="VARCHAR" property="wechatAccount"/>
+        <result column="delivery_company" jdbcType="VARCHAR" property="deliveryCompany"/>
+        <result column="delivery_sn" jdbcType="VARCHAR" property="deliverySn"/>
+        <result column="receiver_name" jdbcType="VARCHAR" property="receiverName"/>
+        <result column="receiver_phone" jdbcType="VARCHAR" property="receiverPhone"/>
+        <result column="receiver_detail_address" jdbcType="VARCHAR" property="receiverDetailAddress"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="delivery_time" jdbcType="TIMESTAMP" property="deliveryTime"/>
+        <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+
+    <!--根据用户id，订单状态，删除状态 查询订单-->
+    <select id="getOrderList" resultMap="orderDetailMap">
+        SELECT
+        o.*,
+        pp.name product_name,
+        pp.shop_name shop_name
+        FROM
+        oms_order o
+        INNER JOIN pms_product pp ON o.product_id = pp.id
+        INNER JOIN ums_admin ua ON pp.create_user_id = ua.id
         WHERE
-        id IN
-        <foreach collection="list" item="item" separator="," open="(" close=")">
-            #{item.orderId}
-        </foreach>
-        AND `status` = 1
+        <if test="queryParam.orderSn !=null and queryParam.orderSn !=''">
+            o.order_sn = #{queryParam.orderSn}
+            and
+        </if>
+        ua.id = #{queryParam.adminId}
+        and
+        o.delete_status = 0
+        <if test="queryParam.status != -1">
+            and
+            o.status = #{queryParam.status}
+        </if>
+
+        <if test="queryParam.receiverKeyword != null and queryParam.receiverKeyword != ''">
+            AND (
+            receiver_name LIKE concat("%",#{queryParam.receiverKeyword},"%")
+            OR receiver_phone LIKE concat("%",#{queryParam.receiverKeyword},"%")
+            OR wechat_account LIKE concat("%",#{queryParam.receiverKeyword},"%")
+            )
+        </if>
+        ORDER BY
+        o.create_time desc;
+    </select>
+
+    <select id="countMyOrder" parameterType="com.macro.mall.domain.dto.OmsOrderHandleParam" resultType="Integer">
+        select count(*)
+        from oms_order oo
+        inner join pms_product pp on oo.product_id = pp.id
+        where oo.order_sn = #{handleParam.orderSn}
+        and pp.create_user_id = #{handleParam.adminId}
+        <if test="handleParam.currentStatusList !=null and handleParam.currentStatusList !=''">
+            and find_in_set(oo.status, #{handleParam.currentStatusList})
+        </if>
+        and oo.delete_status = 0
+    </select>
+
+    <update id="delivery" parameterType="com.macro.mall.domain.dto.OmsOrderHandleParam">
+        UPDATE oms_order
+        SET delivery_sn      =#{handleParam.deliverySn},
+            delivery_company =#{handleParam.deliveryCompany},
+            delivery_time    =#{handleParam.deliveryTime,jdbcType=TIMESTAMP},
+            `status`         = #{handleParam.orderStatus}
+        WHERE order_sn = #{handleParam.orderSn}
+          AND `status` = 0
+          AND delete_status = 0
     </update>
     <select id="getDetail" resultMap="orderDetailResultMap">
         SELECT o.*,
-            oi.id item_id,
-            oi.product_id item_product_id,
-            oi.product_sn item_product_sn,
-            oi.product_pic item_product_pic,
-            oi.product_name item_product_name,
-            oi.product_brand item_product_brand,
-            oi.product_price item_product_price,
-            oi.product_quantity item_product_quantity,
-            oi.product_attr item_product_attr,
-            oh.id history_id,
-            oh.operate_man history_operate_man,
-            oh.create_time history_create_time,
-            oh.order_status history_order_status,
-            oh.note history_note
-        FROM
-            oms_order o
-            LEFT JOIN oms_order_item oi ON o.id = oi.order_id
-            LEFT JOIN oms_order_operate_history oh ON o.id = oh.order_id
-        WHERE
-            o.id = #{id}
-        ORDER BY oi.id ASC,oh.create_time DESC
+               oi.id               item_id,
+               oi.product_id       item_product_id,
+               oi.product_sn       item_product_sn,
+               oi.product_pic      item_product_pic,
+               oi.product_name     item_product_name,
+               oi.product_brand    item_product_brand,
+               oi.product_price    item_product_price,
+               oi.product_quantity item_product_quantity,
+               oi.product_attr     item_product_attr,
+               oh.id               history_id,
+               oh.operate_man      history_operate_man,
+               oh.create_time      history_create_time,
+               oh.order_status     history_order_status,
+               oh.note             history_note
+        FROM oms_order o
+                 LEFT JOIN oms_order_item oi ON o.id = oi.order_id
+                 LEFT JOIN oms_order_operate_history oh ON o.id = oh.order_id
+        WHERE o.id = #{id}
+        ORDER BY oi.id ASC, oh.create_time DESC
     </select>
 </mapper>

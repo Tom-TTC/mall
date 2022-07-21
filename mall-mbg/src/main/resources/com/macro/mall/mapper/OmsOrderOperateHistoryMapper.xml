@@ -3,10 +3,10 @@
 <mapper namespace="com.macro.mall.mapper.OmsOrderOperateHistoryMapper">
   <resultMap id="BaseResultMap" type="com.macro.mall.model.OmsOrderOperateHistory">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="order_sn" jdbcType="VARCHAR" property="orderSn" />
     <result column="operate_man" jdbcType="VARCHAR" property="operateMan" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="order_status" jdbcType="INTEGER" property="orderStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="note" jdbcType="VARCHAR" property="note" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -68,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, order_id, operate_man, create_time, order_status, note
+    id, order_sn, operate_man, order_status, create_time, note
   </sql>
   <select id="selectByExample" parameterType="com.macro.mall.model.OmsOrderOperateHistoryExample" resultMap="BaseResultMap">
     select
@@ -104,10 +104,10 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into oms_order_operate_history (order_id, operate_man, create_time, 
-      order_status, note)
-    values (#{orderId,jdbcType=BIGINT}, #{operateMan,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{orderStatus,jdbcType=INTEGER}, #{note,jdbcType=VARCHAR})
+    insert into oms_order_operate_history (order_sn, operate_man, order_status, 
+      create_time, note)
+    values (#{orderSn,jdbcType=VARCHAR}, #{operateMan,jdbcType=VARCHAR}, #{orderStatus,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{note,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.macro.mall.model.OmsOrderOperateHistory">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -115,34 +115,34 @@
     </selectKey>
     insert into oms_order_operate_history
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="orderId != null">
-        order_id,
+      <if test="orderSn != null">
+        order_sn,
       </if>
       <if test="operateMan != null">
         operate_man,
       </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
       <if test="orderStatus != null">
         order_status,
+      </if>
+      <if test="createTime != null">
+        create_time,
       </if>
       <if test="note != null">
         note,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="orderId != null">
-        #{orderId,jdbcType=BIGINT},
+      <if test="orderSn != null">
+        #{orderSn,jdbcType=VARCHAR},
       </if>
       <if test="operateMan != null">
         #{operateMan,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="orderStatus != null">
         #{orderStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="note != null">
         #{note,jdbcType=VARCHAR},
@@ -161,17 +161,17 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.orderId != null">
-        order_id = #{record.orderId,jdbcType=BIGINT},
+      <if test="record.orderSn != null">
+        order_sn = #{record.orderSn,jdbcType=VARCHAR},
       </if>
       <if test="record.operateMan != null">
         operate_man = #{record.operateMan,jdbcType=VARCHAR},
       </if>
-      <if test="record.createTime != null">
-        create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="record.orderStatus != null">
         order_status = #{record.orderStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.note != null">
         note = #{record.note,jdbcType=VARCHAR},
@@ -184,10 +184,10 @@
   <update id="updateByExample" parameterType="map">
     update oms_order_operate_history
     set id = #{record.id,jdbcType=BIGINT},
-      order_id = #{record.orderId,jdbcType=BIGINT},
+      order_sn = #{record.orderSn,jdbcType=VARCHAR},
       operate_man = #{record.operateMan,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
       order_status = #{record.orderStatus,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
       note = #{record.note,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -196,17 +196,17 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.macro.mall.model.OmsOrderOperateHistory">
     update oms_order_operate_history
     <set>
-      <if test="orderId != null">
-        order_id = #{orderId,jdbcType=BIGINT},
+      <if test="orderSn != null">
+        order_sn = #{orderSn,jdbcType=VARCHAR},
       </if>
       <if test="operateMan != null">
         operate_man = #{operateMan,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="orderStatus != null">
         order_status = #{orderStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="note != null">
         note = #{note,jdbcType=VARCHAR},
@@ -216,10 +216,10 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.macro.mall.model.OmsOrderOperateHistory">
     update oms_order_operate_history
-    set order_id = #{orderId,jdbcType=BIGINT},
+    set order_sn = #{orderSn,jdbcType=VARCHAR},
       operate_man = #{operateMan,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
       order_status = #{orderStatus,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
       note = #{note,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>

@@ -46,7 +46,13 @@
         <table tableName="pms_product" domainObjectName="PmsProduct">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>-->
-        <table tableName="pms_sku_stock" domainObjectName="PmsSkuStock">
+        <!--<table tableName="pms_sku_stock" domainObjectName="PmsSkuStock">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>-->
+        <!--<table tableName="oms_order" domainObjectName="OmsOrder">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>-->
+        <table tableName="oms_order_operate_history" domainObjectName="OmsOrderOperateHistory">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>

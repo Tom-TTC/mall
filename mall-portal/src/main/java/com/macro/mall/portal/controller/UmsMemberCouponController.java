@@ -22,7 +22,7 @@ import java.util.List;
  * Created by macro on 2018/8/29.
  */
 @Controller
-@Api(tags = "UmsMemberCouponController", description = "用户优惠券管理")
+@Api(tags = "用户优惠券管理", description = "用户优惠券管理")
 @RequestMapping("/member/coupon")
 public class UmsMemberCouponController {
     @Autowired

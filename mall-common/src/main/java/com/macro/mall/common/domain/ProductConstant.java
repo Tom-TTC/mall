@@ -7,9 +7,6 @@ package com.macro.mall.common.domain;
  * @desc ...
  */
 public interface ProductConstant {
-    /**************************数字常量区********************************/
-    int DELETED = 1;
-    int NOT_DELETED = 0;
 
     //上架状态
     int ONLINE = 1;

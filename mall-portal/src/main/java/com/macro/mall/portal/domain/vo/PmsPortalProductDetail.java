@@ -1,22 +1,21 @@
-package com.macro.mall.domain.vo;
+package com.macro.mall.portal.domain.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.macro.mall.domain.dto.PmsSkuParam;
+import com.macro.mall.common.domain.vo.PmsSkuResponse;
+import com.macro.mall.model.*;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import org.hibernate.validator.constraints.Length;
+import lombok.Getter;
+import lombok.Setter;
 
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * 查询单个商品修改后返回的结果
- * Created by macro on 2018/4/26.
+ * 前台商品详情
+ * Created by macro on 2020/4/6.
  */
-@Data
-public class PmsProductResponse {
+@Getter
+@Setter
+public class PmsPortalProductDetail{
     @ApiModelProperty(value = "商品id")
     private Long id;
 
