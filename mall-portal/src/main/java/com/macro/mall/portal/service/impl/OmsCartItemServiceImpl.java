@@ -105,10 +105,6 @@ public class OmsCartItemServiceImpl implements OmsCartItemService {
         return cartItemMapper.updateByExampleSelective(record, example);
     }
 
-    @Override
-    public CartProduct getCartProduct(Long productId) {
-        return productDao.getCartProduct(productId);
-    }
 
     @Override
     public int updateAttr(OmsCartItem cartItem) {

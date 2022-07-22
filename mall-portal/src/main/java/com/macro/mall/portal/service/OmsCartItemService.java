@@ -39,11 +39,6 @@ public interface OmsCartItemService {
     int delete(Long memberId,List<Long> ids);
 
     /**
-     *获取购物车中用于选择商品规格的商品信息
-     */
-    CartProduct getCartProduct(Long productId);
-
-    /**
      * 修改购物车中商品的规格
      */
     @Transactional

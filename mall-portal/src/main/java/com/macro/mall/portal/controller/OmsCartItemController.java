@@ -66,13 +66,6 @@ public class OmsCartItemController {
         return CommonResult.failed();
     }
 
-    @ApiOperation("获取购物车中指定商品的规格,用于重选规格")
-    @RequestMapping(value = "/getProduct/{productId}", method = RequestMethod.GET)
-    @ResponseBody
-    public CommonResult<CartProduct> getCartProduct(@PathVariable Long productId) {
-        CartProduct cartProduct = cartItemService.getCartProduct(productId);
-        return CommonResult.success(cartProduct);
-    }
 
     @ApiOperation("修改购物车中商品的规格")
     @RequestMapping(value = "/update/attr", method = RequestMethod.POST)

@@ -52,7 +52,19 @@
         <!--<table tableName="oms_order" domainObjectName="OmsOrder">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>-->
-        <table tableName="oms_order_operate_history" domainObjectName="OmsOrderOperateHistory">
+        <!--<table tableName="oms_order_operate_history" domainObjectName="OmsOrderOperateHistory">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>-->
+        <table tableName="ums_admin" domainObjectName="UmsAdmin">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="oms_order" domainObjectName="OmsOrder">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="ums_invite_record" domainObjectName="UmsInviteRecord">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="ums_admin_info" domainObjectName="UmsAdminInfo">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>

@@ -27,6 +27,9 @@ public class OmsOrderHandleParam {
     @NotNull(message = "订单sn不能为空")
     private String orderSn;
 
+    @ApiModelProperty("拒绝原因")
+    private String denyReason;
+
     @ApiModelProperty("物流公司")
     private String deliveryCompany;
 

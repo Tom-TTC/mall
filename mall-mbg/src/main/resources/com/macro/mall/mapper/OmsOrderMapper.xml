@@ -19,6 +19,7 @@
     <result column="receiver_detail_address" jdbcType="VARCHAR" property="receiverDetailAddress" />
     <result column="note" jdbcType="VARCHAR" property="note" />
     <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="deny_reason" jdbcType="VARCHAR" property="denyReason" />
     <result column="delete_status" jdbcType="INTEGER" property="deleteStatus" />
     <result column="delivery_time" jdbcType="TIMESTAMP" property="deliveryTime" />
     <result column="receive_time" jdbcType="TIMESTAMP" property="receiveTime" />
@@ -86,8 +87,8 @@
   <sql id="Base_Column_List">
     id, member_id, order_sn, product_id, member_username, wechat_account, source_type, 
     delivery_company, delivery_sn, receiver_name, receiver_phone, receiver_province, 
-    receiver_city, receiver_region, receiver_detail_address, note, status, delete_status, 
-    delivery_time, receive_time, modify_time, create_time
+    receiver_city, receiver_region, receiver_detail_address, note, status, deny_reason, 
+    delete_status, delivery_time, receive_time, modify_time, create_time
   </sql>
   <select id="selectByExample" parameterType="com.macro.mall.model.OmsOrderExample" resultMap="BaseResultMap">
     select
@@ -128,17 +129,17 @@
       delivery_company, delivery_sn, receiver_name, 
       receiver_phone, receiver_province, receiver_city, 
       receiver_region, receiver_detail_address, 
-      note, status, delete_status, 
-      delivery_time, receive_time, modify_time, 
-      create_time)
+      note, status, deny_reason, 
+      delete_status, delivery_time, receive_time, 
+      modify_time, create_time)
     values (#{memberId,jdbcType=BIGINT}, #{orderSn,jdbcType=VARCHAR}, #{productId,jdbcType=BIGINT}, 
       #{memberUsername,jdbcType=VARCHAR}, #{wechatAccount,jdbcType=VARCHAR}, #{sourceType,jdbcType=INTEGER}, 
       #{deliveryCompany,jdbcType=VARCHAR}, #{deliverySn,jdbcType=VARCHAR}, #{receiverName,jdbcType=VARCHAR}, 
       #{receiverPhone,jdbcType=VARCHAR}, #{receiverProvince,jdbcType=VARCHAR}, #{receiverCity,jdbcType=VARCHAR}, 
       #{receiverRegion,jdbcType=VARCHAR}, #{receiverDetailAddress,jdbcType=VARCHAR}, 
-      #{note,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{deleteStatus,jdbcType=INTEGER}, 
-      #{deliveryTime,jdbcType=TIMESTAMP}, #{receiveTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, 
-      #{createTime,jdbcType=TIMESTAMP})
+      #{note,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{denyReason,jdbcType=VARCHAR}, 
+      #{deleteStatus,jdbcType=INTEGER}, #{deliveryTime,jdbcType=TIMESTAMP}, #{receiveTime,jdbcType=TIMESTAMP}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.macro.mall.model.OmsOrder">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -193,6 +194,9 @@
       </if>
       <if test="status != null">
         status,
+      </if>
+      <if test="denyReason != null">
+        deny_reason,
       </if>
       <if test="deleteStatus != null">
         delete_status,
@@ -258,6 +262,9 @@
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
+      </if>
+      <if test="denyReason != null">
+        #{denyReason,jdbcType=VARCHAR},
       </if>
       <if test="deleteStatus != null">
         #{deleteStatus,jdbcType=INTEGER},
@@ -336,6 +343,9 @@
       <if test="record.status != null">
         status = #{record.status,jdbcType=INTEGER},
       </if>
+      <if test="record.denyReason != null">
+        deny_reason = #{record.denyReason,jdbcType=VARCHAR},
+      </if>
       <if test="record.deleteStatus != null">
         delete_status = #{record.deleteStatus,jdbcType=INTEGER},
       </if>
@@ -375,6 +385,7 @@
       receiver_detail_address = #{record.receiverDetailAddress,jdbcType=VARCHAR},
       note = #{record.note,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=INTEGER},
+      deny_reason = #{record.denyReason,jdbcType=VARCHAR},
       delete_status = #{record.deleteStatus,jdbcType=INTEGER},
       delivery_time = #{record.deliveryTime,jdbcType=TIMESTAMP},
       receive_time = #{record.receiveTime,jdbcType=TIMESTAMP},
@@ -435,6 +446,9 @@
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
       </if>
+      <if test="denyReason != null">
+        deny_reason = #{denyReason,jdbcType=VARCHAR},
+      </if>
       <if test="deleteStatus != null">
         delete_status = #{deleteStatus,jdbcType=INTEGER},
       </if>
@@ -471,6 +485,7 @@
       receiver_detail_address = #{receiverDetailAddress,jdbcType=VARCHAR},
       note = #{note,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
+      deny_reason = #{denyReason,jdbcType=VARCHAR},
       delete_status = #{deleteStatus,jdbcType=INTEGER},
       delivery_time = #{deliveryTime,jdbcType=TIMESTAMP},
       receive_time = #{receiveTime,jdbcType=TIMESTAMP},

@@ -66,6 +66,9 @@ public class OmsOrder implements Serializable {
     @ApiModelProperty(value = "订单状态：0->待确认；1->已寄件；2->已拒绝；3->已取消")
     private Integer status;
 
+    @ApiModelProperty(value = "拒绝原因")
+    private String denyReason;
+
     @ApiModelProperty(value = "删除状态：0->未删除；1->已删除")
     private Integer deleteStatus;
 

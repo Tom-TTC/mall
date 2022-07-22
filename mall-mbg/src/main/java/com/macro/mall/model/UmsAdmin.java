@@ -5,10 +5,13 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class UmsAdmin implements Serializable {
+    @ApiModelProperty(value = "账号id")
     private Long id;
 
+    @ApiModelProperty(value = "账号名")
     private String username;
 
+    @ApiModelProperty(value = "密码")
     private String password;
 
     @ApiModelProperty(value = "头像")
@@ -22,6 +25,9 @@ public class UmsAdmin implements Serializable {
 
     @ApiModelProperty(value = "备注信息")
     private String note;
+
+    @ApiModelProperty(value = "邀请码")
+    private String inviteCode;
 
     @ApiModelProperty(value = "创建时间")
     private Date createTime;
@@ -127,6 +133,7 @@ public class UmsAdmin implements Serializable {
         sb.append(", email=").append(email);
         sb.append(", nickName=").append(nickName);
         sb.append(", note=").append(note);
+        sb.append(", inviteCode=").append(inviteCode);
         sb.append(", createTime=").append(createTime);
         sb.append(", loginTime=").append(loginTime);
         sb.append(", status=").append(status);

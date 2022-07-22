@@ -1245,6 +1245,76 @@ public class OmsOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andDenyReasonIsNull() {
+            addCriterion("deny_reason is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDenyReasonIsNotNull() {
+            addCriterion("deny_reason is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDenyReasonEqualTo(String value) {
+            addCriterion("deny_reason =", value, "denyReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andDenyReasonNotEqualTo(String value) {
+            addCriterion("deny_reason <>", value, "denyReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andDenyReasonGreaterThan(String value) {
+            addCriterion("deny_reason >", value, "denyReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andDenyReasonGreaterThanOrEqualTo(String value) {
+            addCriterion("deny_reason >=", value, "denyReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andDenyReasonLessThan(String value) {
+            addCriterion("deny_reason <", value, "denyReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andDenyReasonLessThanOrEqualTo(String value) {
+            addCriterion("deny_reason <=", value, "denyReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andDenyReasonLike(String value) {
+            addCriterion("deny_reason like", value, "denyReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andDenyReasonNotLike(String value) {
+            addCriterion("deny_reason not like", value, "denyReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andDenyReasonIn(List<String> values) {
+            addCriterion("deny_reason in", values, "denyReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andDenyReasonNotIn(List<String> values) {
+            addCriterion("deny_reason not in", values, "denyReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andDenyReasonBetween(String value1, String value2) {
+            addCriterion("deny_reason between", value1, value2, "denyReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andDenyReasonNotBetween(String value1, String value2) {
+            addCriterion("deny_reason not between", value1, value2, "denyReason");
+            return (Criteria) this;
+        }
+
         public Criteria andDeleteStatusIsNull() {
             addCriterion("delete_status is null");
             return (Criteria) this;

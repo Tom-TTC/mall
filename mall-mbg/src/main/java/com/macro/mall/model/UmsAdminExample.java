@@ -585,6 +585,76 @@ public class UmsAdminExample {
             return (Criteria) this;
         }
 
+        public Criteria andInviteCodeIsNull() {
+            addCriterion("invite_code is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteCodeIsNotNull() {
+            addCriterion("invite_code is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteCodeEqualTo(String value) {
+            addCriterion("invite_code =", value, "inviteCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteCodeNotEqualTo(String value) {
+            addCriterion("invite_code <>", value, "inviteCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteCodeGreaterThan(String value) {
+            addCriterion("invite_code >", value, "inviteCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("invite_code >=", value, "inviteCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteCodeLessThan(String value) {
+            addCriterion("invite_code <", value, "inviteCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteCodeLessThanOrEqualTo(String value) {
+            addCriterion("invite_code <=", value, "inviteCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteCodeLike(String value) {
+            addCriterion("invite_code like", value, "inviteCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteCodeNotLike(String value) {
+            addCriterion("invite_code not like", value, "inviteCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteCodeIn(List<String> values) {
+            addCriterion("invite_code in", values, "inviteCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteCodeNotIn(List<String> values) {
+            addCriterion("invite_code not in", values, "inviteCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteCodeBetween(String value1, String value2) {
+            addCriterion("invite_code between", value1, value2, "inviteCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andInviteCodeNotBetween(String value1, String value2) {
+            addCriterion("invite_code not between", value1, value2, "inviteCode");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");
             return (Criteria) this;
