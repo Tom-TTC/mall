@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -19,7 +20,8 @@ import java.util.List;
  * Created by macro on 2018/4/26.
  */
 @Controller
-@Api(tags = "商品品牌管理", description = "商品品牌管理")
+@ApiIgnore
+@Api(tags = "商品品牌管理", description = "商品品牌管理",hidden = true)
 @RequestMapping("/brand")
 public class PmsBrandController {
     @Autowired

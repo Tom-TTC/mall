@@ -4,6 +4,7 @@ import com.macro.mall.common.domain.CommonConstant;
 import com.macro.mall.common.exception.Asserts;
 import com.macro.mall.domain.bo.AdminUserDetails;
 import com.macro.mall.model.UmsAdmin;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -27,7 +28,8 @@ public class CommonService {
         if (principal == null) {
             Asserts.fail(CommonConstant.USER_UNLOGIN);
         }
-        AdminUserDetails userDetails = (AdminUserDetails) principal;
+        UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+        AdminUserDetails userDetails = (AdminUserDetails) authenticationToken.getPrincipal();
         return userDetails.getUmsAdmin();
     }
 
@@ -35,7 +37,8 @@ public class CommonService {
         if (principal == null) {
             Asserts.fail(CommonConstant.USER_UNLOGIN);
         }
-        AdminUserDetails userDetails = (AdminUserDetails) principal;
+        UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+        AdminUserDetails userDetails = (AdminUserDetails) authenticationToken.getPrincipal();
         return userDetails.getUmsAdmin().getId();
     }
 

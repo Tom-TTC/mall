@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -20,7 +21,8 @@ import java.util.List;
  * Created by macro on 2018/6/1.
  */
 @Controller
-@Api(tags = "商品专题管理", description = "商品专题管理")
+@ApiIgnore
+@Api(tags = "商品专题管理", description = "商品专题管理",hidden = true)
 @RequestMapping("/subject")
 public class CmsSubjectController {
     @Autowired

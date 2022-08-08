@@ -5,6 +5,7 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="member_id" jdbcType="BIGINT" property="memberId" />
     <result column="order_sn" jdbcType="VARCHAR" property="orderSn" />
+    <result column="admin_id" jdbcType="BIGINT" property="adminId" />
     <result column="product_id" jdbcType="BIGINT" property="productId" />
     <result column="member_username" jdbcType="VARCHAR" property="memberUsername" />
     <result column="wechat_account" jdbcType="VARCHAR" property="wechatAccount" />
@@ -85,7 +86,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, member_id, order_sn, product_id, member_username, wechat_account, source_type, 
+    id, member_id, order_sn, admin_id, product_id, member_username, wechat_account, source_type, 
     delivery_company, delivery_sn, receiver_name, receiver_phone, receiver_province, 
     receiver_city, receiver_region, receiver_detail_address, note, status, deny_reason, 
     delete_status, delivery_time, receive_time, modify_time, create_time
@@ -124,19 +125,19 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into oms_order (member_id, order_sn, product_id, 
-      member_username, wechat_account, source_type, 
-      delivery_company, delivery_sn, receiver_name, 
-      receiver_phone, receiver_province, receiver_city, 
-      receiver_region, receiver_detail_address, 
+    insert into oms_order (member_id, order_sn, admin_id, 
+      product_id, member_username, wechat_account, 
+      source_type, delivery_company, delivery_sn, 
+      receiver_name, receiver_phone, receiver_province, 
+      receiver_city, receiver_region, receiver_detail_address, 
       note, status, deny_reason, 
       delete_status, delivery_time, receive_time, 
       modify_time, create_time)
-    values (#{memberId,jdbcType=BIGINT}, #{orderSn,jdbcType=VARCHAR}, #{productId,jdbcType=BIGINT}, 
-      #{memberUsername,jdbcType=VARCHAR}, #{wechatAccount,jdbcType=VARCHAR}, #{sourceType,jdbcType=INTEGER}, 
-      #{deliveryCompany,jdbcType=VARCHAR}, #{deliverySn,jdbcType=VARCHAR}, #{receiverName,jdbcType=VARCHAR}, 
-      #{receiverPhone,jdbcType=VARCHAR}, #{receiverProvince,jdbcType=VARCHAR}, #{receiverCity,jdbcType=VARCHAR}, 
-      #{receiverRegion,jdbcType=VARCHAR}, #{receiverDetailAddress,jdbcType=VARCHAR}, 
+    values (#{memberId,jdbcType=BIGINT}, #{orderSn,jdbcType=VARCHAR}, #{adminId,jdbcType=BIGINT}, 
+      #{productId,jdbcType=BIGINT}, #{memberUsername,jdbcType=VARCHAR}, #{wechatAccount,jdbcType=VARCHAR}, 
+      #{sourceType,jdbcType=INTEGER}, #{deliveryCompany,jdbcType=VARCHAR}, #{deliverySn,jdbcType=VARCHAR}, 
+      #{receiverName,jdbcType=VARCHAR}, #{receiverPhone,jdbcType=VARCHAR}, #{receiverProvince,jdbcType=VARCHAR}, 
+      #{receiverCity,jdbcType=VARCHAR}, #{receiverRegion,jdbcType=VARCHAR}, #{receiverDetailAddress,jdbcType=VARCHAR}, 
       #{note,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{denyReason,jdbcType=VARCHAR}, 
       #{deleteStatus,jdbcType=INTEGER}, #{deliveryTime,jdbcType=TIMESTAMP}, #{receiveTime,jdbcType=TIMESTAMP}, 
       #{modifyTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP})
@@ -152,6 +153,9 @@
       </if>
       <if test="orderSn != null">
         order_sn,
+      </if>
+      <if test="adminId != null">
+        admin_id,
       </if>
       <if test="productId != null">
         product_id,
@@ -220,6 +224,9 @@
       </if>
       <if test="orderSn != null">
         #{orderSn,jdbcType=VARCHAR},
+      </if>
+      <if test="adminId != null">
+        #{adminId,jdbcType=BIGINT},
       </if>
       <if test="productId != null">
         #{productId,jdbcType=BIGINT},
@@ -301,6 +308,9 @@
       <if test="record.orderSn != null">
         order_sn = #{record.orderSn,jdbcType=VARCHAR},
       </if>
+      <if test="record.adminId != null">
+        admin_id = #{record.adminId,jdbcType=BIGINT},
+      </if>
       <if test="record.productId != null">
         product_id = #{record.productId,jdbcType=BIGINT},
       </if>
@@ -371,6 +381,7 @@
     set id = #{record.id,jdbcType=BIGINT},
       member_id = #{record.memberId,jdbcType=BIGINT},
       order_sn = #{record.orderSn,jdbcType=VARCHAR},
+      admin_id = #{record.adminId,jdbcType=BIGINT},
       product_id = #{record.productId,jdbcType=BIGINT},
       member_username = #{record.memberUsername,jdbcType=VARCHAR},
       wechat_account = #{record.wechatAccount,jdbcType=VARCHAR},
@@ -403,6 +414,9 @@
       </if>
       <if test="orderSn != null">
         order_sn = #{orderSn,jdbcType=VARCHAR},
+      </if>
+      <if test="adminId != null">
+        admin_id = #{adminId,jdbcType=BIGINT},
       </if>
       <if test="productId != null">
         product_id = #{productId,jdbcType=BIGINT},
@@ -471,6 +485,7 @@
     update oms_order
     set member_id = #{memberId,jdbcType=BIGINT},
       order_sn = #{orderSn,jdbcType=VARCHAR},
+      admin_id = #{adminId,jdbcType=BIGINT},
       product_id = #{productId,jdbcType=BIGINT},
       member_username = #{memberUsername,jdbcType=VARCHAR},
       wechat_account = #{wechatAccount,jdbcType=VARCHAR},

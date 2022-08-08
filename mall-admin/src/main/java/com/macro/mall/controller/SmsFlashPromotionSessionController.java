@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -17,7 +18,8 @@ import java.util.List;
  * Created by macro on 2018/11/16.
  */
 @Controller
-@Api(tags = "限时购场次管理", description = "限时购场次管理")
+@ApiIgnore
+@Api(tags = "限时购场次管理", description = "限时购场次管理",hidden = true)
 @RequestMapping("/flashSession")
 public class SmsFlashPromotionSessionController {
     @Autowired

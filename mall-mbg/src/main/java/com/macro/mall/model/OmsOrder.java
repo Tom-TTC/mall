@@ -1,5 +1,6 @@
 package com.macro.mall.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.macro.mall.common.domain.CommonConstant;
 import com.macro.mall.common.domain.OrderConstant;
 import com.macro.mall.common.utils.DateUtils;
@@ -23,6 +24,9 @@ public class OmsOrder implements Serializable {
 
     @ApiModelProperty(value = "订单编号")
     private String orderSn;
+
+    @ApiModelProperty(value = "商品创建人id")
+    private Long adminId;
 
     @ApiModelProperty(value = "商品id")
     private Long productId;
@@ -73,30 +77,36 @@ public class OmsOrder implements Serializable {
     private Integer deleteStatus;
 
     @ApiModelProperty(value = "发货时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private LocalDateTime deliveryTime;
 
     @ApiModelProperty(value = "确认收货时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private LocalDateTime receiveTime;
 
     @ApiModelProperty(value = "修改时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private LocalDateTime modifyTime;
 
     @ApiModelProperty(value = "提交时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private LocalDateTime createTime;
 
     private static final long serialVersionUID = 1L;
 
 
     public OmsOrder(Long productId,
-                        Long memberId,
-                        String memberUsername,
-                        String wechatAccount,
-                        String receiverName,
-                        String receiverPhone,
-                        String receiverDetailAddress) {
+                    Long memberId,
+                    String memberUsername,
+                    Long adminId,
+                    String wechatAccount,
+                    String receiverName,
+                    String receiverPhone,
+                    String receiverDetailAddress) {
         this.productId = productId;
         this.memberId = memberId;
         this.memberUsername = memberUsername;
+        this.adminId = adminId;
         this.wechatAccount = wechatAccount;
         this.receiverName = receiverName;
         this.receiverPhone = receiverPhone;

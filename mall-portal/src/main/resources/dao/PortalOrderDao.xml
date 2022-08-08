@@ -23,11 +23,11 @@
     <select id="getOrderList" resultMap="orderDetailMap">
         SELECT
            o.*,
-           ot.name product_name,
-           ot.shop_name shop_name
+           p.name product_name,
+           p.shop_name shop_name
         FROM
             oms_order o
-            INNER JOIN oms_order_item ot ON o.id = ot.order_id
+            INNER JOIN pms_product p ON o.product_id = p.id
         WHERE
             o.member_id = ${memberId}
             and
@@ -37,7 +37,7 @@
             </if>
             o.delete_status = 0
         ORDER BY
-            o.create_time desc;
+            o.create_time desc
     </select>
 
     <select id="getTimeOutOrders" resultMap="orderDetailMap">

@@ -8,6 +8,9 @@ import com.macro.mall.model.UmsMemberExample;
 import com.macro.mall.model.UmsMemberLevel;
 import com.macro.mall.model.UmsMemberLevelExample;
 import com.macro.mall.portal.domain.MemberDetails;
+import com.macro.mall.portal.domain.vo.UmsMemberHeadRequest;
+import com.macro.mall.portal.domain.vo.UmsMemberInfo;
+import com.macro.mall.portal.domain.vo.UmsMemberPasswordRequest;
 import com.macro.mall.portal.service.UmsMemberCacheService;
 import com.macro.mall.portal.service.UmsMemberService;
 import com.macro.mall.security.util.JwtTokenUtil;
@@ -25,6 +28,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -75,6 +79,7 @@ public class UmsMemberServiceImpl implements UmsMemberService {
     }
 
     @Override
+    @Transactional
     public void register(String username, String password, String telephone, String authCode) {
         //验证验证码
         if (!verifyAuthCode(authCode, telephone)) {
@@ -118,21 +123,37 @@ public class UmsMemberServiceImpl implements UmsMemberService {
     }
 
     @Override
-    public void updatePassword(String telephone, String password, String authCode) {
+    @Transactional
+    public void updatePassword(UmsMemberPasswordRequest passwordRequest) {
         UmsMemberExample example = new UmsMemberExample();
-        example.createCriteria().andPhoneEqualTo(telephone);
+        example.createCriteria().andPhoneEqualTo(passwordRequest.getTelephone());
         List<UmsMember> memberList = memberMapper.selectByExample(example);
         if (CollectionUtils.isEmpty(memberList)) {
             Asserts.fail("该账号不存在");
         }
         //验证验证码
-        if (!verifyAuthCode(authCode, telephone)) {
+        if (!verifyAuthCode(passwordRequest.getAuthCode(), passwordRequest.getTelephone())) {
             Asserts.fail("验证码错误");
         }
         UmsMember umsMember = memberList.get(0);
-        umsMember.setPassword(passwordEncoder.encode(password));
+        umsMember.setPassword(passwordEncoder.encode(passwordRequest.getPassword()));
         memberMapper.updateByPrimaryKeySelective(umsMember);
         memberCacheService.delMember(umsMember.getId());
+    }
+
+    @Override
+    @Transactional
+    public void updateHeadIcon(UmsMember member, UmsMemberHeadRequest headRequest) {
+        UmsMember umsMember = new UmsMember().
+                setId(member.getId())
+                .setIcon(headRequest.getHeadIconUrl());
+        memberMapper.updateByPrimaryKeySelective(umsMember);
+    }
+
+    @Override
+    public UmsMemberInfo getMemberInfo(UmsMember umsMember) {
+        UmsMember member = memberMapper.selectByPrimaryKey(umsMember.getId());
+        return new UmsMemberInfo(member);
     }
 
     @Override
@@ -146,15 +167,6 @@ public class UmsMemberServiceImpl implements UmsMemberService {
     @Override
     public Long getCurrentMemberId() {
         return getCurrentMember().getId();
-    }
-
-    @Override
-    public void updateIntegration(Long id, Integer integration) {
-        UmsMember record = new UmsMember();
-        record.setId(id);
-        record.setIntegration(integration);
-        memberMapper.updateByPrimaryKeySelective(record);
-        memberCacheService.delMember(id);
     }
 
     @Override

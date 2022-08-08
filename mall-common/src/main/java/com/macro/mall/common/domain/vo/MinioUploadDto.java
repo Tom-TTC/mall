@@ -1,4 +1,4 @@
-package com.macro.mall.domain.dto;
+package com.macro.mall.common.domain.vo;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

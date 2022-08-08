@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ import java.util.List;
  * Created by macro on 2019/1/28.
  */
 @Controller
+@ApiIgnore
 @Api(tags = "首页内容管理", description = "首页内容管理")
 @RequestMapping("/home")
 public class HomeController {

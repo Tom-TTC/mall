@@ -109,10 +109,15 @@
                 <version>${pagehelper-starter.version}</version>
             </dependency>
             <!--MyBatis分页插件-->
-            <dependency>
+            <!--<dependency>
                 <groupId>com.github.pagehelper</groupId>
                 <artifactId>pagehelper</artifactId>
                 <version>${pagehelper.version}</version>
+            </dependency>-->
+            <dependency>
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper-spring-boot-starter</artifactId>
+                <version>1.4.3</version>
             </dependency>
             <!--集成druid连接池-->
             <dependency>

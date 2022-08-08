@@ -7,6 +7,7 @@
     <result column="product_category_name" jdbcType="VARCHAR" property="productCategoryName" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+    <result column="pic" jdbcType="VARCHAR" property="pic" />
     <result column="product_sn" jdbcType="VARCHAR" property="productSn" />
     <result column="delete_status" jdbcType="INTEGER" property="deleteStatus" />
     <result column="publish_status" jdbcType="INTEGER" property="publishStatus" />
@@ -16,6 +17,7 @@
     <result column="sort" jdbcType="INTEGER" property="sort" />
     <result column="sale" jdbcType="INTEGER" property="sale" />
     <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="rebate_rate" jdbcType="INTEGER" property="rebateRate" />
     <result column="promotion_price" jdbcType="DECIMAL" property="promotionPrice" />
     <result column="product_link" jdbcType="VARCHAR" property="productLink" />
     <result column="original_price" jdbcType="DECIMAL" property="originalPrice" />
@@ -90,8 +92,8 @@
   <sql id="Base_Column_List">
     id, product_category_id, product_category_name, name, shop_name, pic, product_sn, 
     delete_status, publish_status, new_status, recommand_status, verify_status, sort, 
-    sale, price, promotion_price, product_link, original_price, album_pics, create_user_id, 
-    create_time, update_time
+    sale, price, rebate_rate, promotion_price, product_link, original_price, album_pics, 
+    create_user_id, create_time, update_time
   </sql>
   <sql id="Blob_Column_List">
     description, detail_html, detail_mobile_html
@@ -153,19 +155,19 @@
       product_sn, delete_status, publish_status, 
       new_status, recommand_status, verify_status, 
       sort, sale, price, 
-      promotion_price, product_link, original_price, 
-      album_pics, create_user_id, create_time, 
-      update_time, description, detail_html, 
-      detail_mobile_html)
+      rebate_rate, promotion_price, product_link, 
+      original_price, album_pics, create_user_id, 
+      create_time, update_time, description, 
+      detail_html, detail_mobile_html)
     values (#{productCategoryId,jdbcType=BIGINT}, #{productCategoryName,jdbcType=VARCHAR}, 
       #{name,jdbcType=VARCHAR}, #{shopName,jdbcType=VARCHAR}, #{pic,jdbcType=VARCHAR}, 
       #{productSn,jdbcType=VARCHAR}, #{deleteStatus,jdbcType=INTEGER}, #{publishStatus,jdbcType=INTEGER}, 
       #{newStatus,jdbcType=INTEGER}, #{recommandStatus,jdbcType=INTEGER}, #{verifyStatus,jdbcType=INTEGER}, 
       #{sort,jdbcType=INTEGER}, #{sale,jdbcType=INTEGER}, #{price,jdbcType=DECIMAL}, 
-      #{promotionPrice,jdbcType=DECIMAL}, #{productLink,jdbcType=VARCHAR}, #{originalPrice,jdbcType=DECIMAL}, 
-      #{albumPics,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{description,jdbcType=LONGVARCHAR}, #{detailHtml,jdbcType=LONGVARCHAR}, 
-      #{detailMobileHtml,jdbcType=LONGVARCHAR})
+      #{rebateRate,jdbcType=INTEGER}, #{promotionPrice,jdbcType=DECIMAL}, #{productLink,jdbcType=VARCHAR}, 
+      #{originalPrice,jdbcType=DECIMAL}, #{albumPics,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{description,jdbcType=LONGVARCHAR}, 
+      #{detailHtml,jdbcType=LONGVARCHAR}, #{detailMobileHtml,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.macro.mall.model.PmsProduct">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -214,6 +216,9 @@
       </if>
       <if test="price != null">
         price,
+      </if>
+      <if test="rebateRate != null">
+        rebate_rate,
       </if>
       <if test="promotionPrice != null">
         promotion_price,
@@ -288,6 +293,9 @@
       </if>
       <if test="price != null">
         #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="rebateRate != null">
+        #{rebateRate,jdbcType=INTEGER},
       </if>
       <if test="promotionPrice != null">
         #{promotionPrice,jdbcType=DECIMAL},
@@ -375,6 +383,9 @@
       <if test="record.price != null">
         price = #{record.price,jdbcType=DECIMAL},
       </if>
+      <if test="record.rebateRate != null">
+        rebate_rate = #{record.rebateRate,jdbcType=INTEGER},
+      </if>
       <if test="record.promotionPrice != null">
         promotion_price = #{record.promotionPrice,jdbcType=DECIMAL},
       </if>
@@ -427,6 +438,7 @@
       sort = #{record.sort,jdbcType=INTEGER},
       sale = #{record.sale,jdbcType=INTEGER},
       price = #{record.price,jdbcType=DECIMAL},
+      rebate_rate = #{record.rebateRate,jdbcType=INTEGER},
       promotion_price = #{record.promotionPrice,jdbcType=DECIMAL},
       product_link = #{record.productLink,jdbcType=VARCHAR},
       original_price = #{record.originalPrice,jdbcType=DECIMAL},
@@ -458,6 +470,7 @@
       sort = #{record.sort,jdbcType=INTEGER},
       sale = #{record.sale,jdbcType=INTEGER},
       price = #{record.price,jdbcType=DECIMAL},
+      rebate_rate = #{record.rebateRate,jdbcType=INTEGER},
       promotion_price = #{record.promotionPrice,jdbcType=DECIMAL},
       product_link = #{record.productLink,jdbcType=VARCHAR},
       original_price = #{record.originalPrice,jdbcType=DECIMAL},
@@ -514,6 +527,9 @@
       <if test="price != null">
         price = #{price,jdbcType=DECIMAL},
       </if>
+      <if test="rebateRate != null">
+        rebate_rate = #{rebateRate,jdbcType=INTEGER},
+      </if>
       <if test="promotionPrice != null">
         promotion_price = #{promotionPrice,jdbcType=DECIMAL},
       </if>
@@ -563,6 +579,7 @@
       sort = #{sort,jdbcType=INTEGER},
       sale = #{sale,jdbcType=INTEGER},
       price = #{price,jdbcType=DECIMAL},
+      rebate_rate = #{rebateRate,jdbcType=INTEGER},
       promotion_price = #{promotionPrice,jdbcType=DECIMAL},
       product_link = #{productLink,jdbcType=VARCHAR},
       original_price = #{originalPrice,jdbcType=DECIMAL},
@@ -591,6 +608,7 @@
       sort = #{sort,jdbcType=INTEGER},
       sale = #{sale,jdbcType=INTEGER},
       price = #{price,jdbcType=DECIMAL},
+      rebate_rate = #{rebateRate,jdbcType=INTEGER},
       promotion_price = #{promotionPrice,jdbcType=DECIMAL},
       product_link = #{productLink,jdbcType=VARCHAR},
       original_price = #{originalPrice,jdbcType=DECIMAL},

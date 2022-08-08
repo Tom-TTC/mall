@@ -1,19 +1,18 @@
 package com.macro.mall.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.time.LocalDateTime;
 
 /**
  * 订单发货参数
  * Created by macro on 2018/10/12.
  */
-@Getter
-@Setter
+@Data
 public class OmsOrderHandleParam {
     @ApiModelProperty("订单更新状态，1->同意寄样；2->拒绝寄样")
     @NotNull(message = "订单状态不能为空")
@@ -38,6 +37,10 @@ public class OmsOrderHandleParam {
 
     @ApiModelProperty(value = "团长id", hidden = true)
     private Long adminId;
+
+    @ApiModelProperty(value = "邮寄时间", hidden = true)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    private LocalDateTime deliveryTime;
 
 
 }

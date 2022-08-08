@@ -34,6 +34,9 @@ public interface OrderConstant {
 
     String ORDER_NOT_EXIST_OR_INVALID = "订单不存在或状态不可操作";
 
+    String DELIVERY_SN_INVALID = "寄样快递号不能为空";
+    String DENY_REASON_INVALID = "拒绝原因不能为空";
+
     String DENY_DELIVERY = "拒绝寄样";
     String ACCEPT_DELIVERY = "同意寄样";
 

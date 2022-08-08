@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -20,7 +21,8 @@ import java.util.List;
  * Created by macro on 2018/10/18.
  */
 @Controller
-@Api(tags = "订单退货申请管理", description = "订单退货申请管理")
+@ApiIgnore
+@Api(tags = "订单退货申请管理", description = "订单退货申请管理",hidden = true)
 @RequestMapping("/returnApply")
 public class OmsOrderReturnApplyController {
     @Autowired

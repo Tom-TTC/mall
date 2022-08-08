@@ -52,16 +52,15 @@
         FROM
         oms_order o
         INNER JOIN pms_product pp ON o.product_id = pp.id
-        INNER JOIN ums_admin ua ON pp.create_user_id = ua.id
         WHERE
         <if test="queryParam.orderSn !=null and queryParam.orderSn !=''">
             o.order_sn = #{queryParam.orderSn}
             and
         </if>
-        ua.id = #{queryParam.adminId}
+        o.admin_id = #{queryParam.adminId}
         and
         o.delete_status = 0
-        <if test="queryParam.status != -1">
+        <if test="queryParam.status != null and queryParam.status != -1">
             and
             o.status = #{queryParam.status}
         </if>
@@ -74,31 +73,39 @@
             )
         </if>
         ORDER BY
-        o.create_time desc;
+        o.create_time desc
     </select>
 
-    <select id="countMyOrder" parameterType="com.macro.mall.domain.dto.OmsOrderHandleParam" resultType="Integer">
+    <select id="countMyOrder" parameterType="com.macro.mall.domain.dto.OmsOrderHandleParam"
+            resultType="java.lang.Integer">
         select count(*)
         from oms_order oo
-        inner join pms_product pp on oo.product_id = pp.id
-        where oo.order_sn = #{handleParam.orderSn}
-        and pp.create_user_id = #{handleParam.adminId}
+        where order_sn = #{handleParam.orderSn}
+        and admin_id = #{handleParam.adminId}
         <if test="handleParam.currentStatusList !=null and handleParam.currentStatusList !=''">
-            and find_in_set(oo.status, #{handleParam.currentStatusList})
+            and find_in_set(status, #{handleParam.currentStatusList})
         </if>
-        and oo.delete_status = 0
+        and delete_status = 0
     </select>
 
     <update id="delivery" parameterType="com.macro.mall.domain.dto.OmsOrderHandleParam">
         UPDATE oms_order
-        SET delivery_sn      =#{handleParam.deliverySn},
-            delivery_company =#{handleParam.deliveryCompany},
-            delivery_time    =#{handleParam.deliveryTime,jdbcType=TIMESTAMP},
+        SET
+            <if test="handleParam.deliverySn != null and handleParam.deliverySn !=''">
+                delivery_sn      =#{handleParam.deliverySn},
+            </if>
+            <if test="handleParam.deliveryCompany != null and handleParam.deliveryCompany !=''">
+                delivery_company      =#{handleParam.deliveryCompany},
+            </if>
+            <if test="handleParam.deliveryTime != null">
+                delivery_time    =#{handleParam.deliveryTime,jdbcType=TIMESTAMP},
+            </if>
             `status`         = #{handleParam.orderStatus}
         WHERE order_sn = #{handleParam.orderSn}
           AND `status` = 0
           AND delete_status = 0
     </update>
+
     <select id="getDetail" resultMap="orderDetailResultMap">
         SELECT o.*,
                oi.id               item_id,

@@ -43,6 +43,9 @@
         <!--<table tableName="ums_admin" domainObjectName="UmsAdmin">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
+        <table tableName="sms_home_advertise" domainObjectName="SmsHomeAdvertise">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
         <table tableName="pms_product" domainObjectName="PmsProduct">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>-->
@@ -55,16 +58,19 @@
         <!--<table tableName="oms_order_operate_history" domainObjectName="OmsOrderOperateHistory">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>-->
-        <table tableName="ums_admin" domainObjectName="UmsAdmin">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="oms_order" domainObjectName="OmsOrder">
+        <!--<table tableName="ums_admin" domainObjectName="UmsAdmin">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="ums_invite_record" domainObjectName="UmsInviteRecord">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="ums_admin_info" domainObjectName="UmsAdminInfo">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="ums_cooperation_request" domainObjectName="UmsCooperationRequest">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>-->
+        <table tableName="ums_member_favorite_product" domainObjectName="UmsMemberFavoriteProduct">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>

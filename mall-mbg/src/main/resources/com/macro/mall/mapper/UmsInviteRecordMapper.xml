@@ -8,6 +8,7 @@
     <result column="user_id_invited" jdbcType="BIGINT" property="userIdInvited" />
     <result column="reward_point" jdbcType="INTEGER" property="rewardPoint" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="username_invited" jdbcType="VARCHAR" property="usernameInvited" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -68,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, user_id, invite_code, user_id_invited, reward_point, create_time
+    id, user_id, invite_code, user_id_invited, reward_point, create_time, username_invited
   </sql>
   <select id="selectByExample" parameterType="com.macro.mall.model.UmsInviteRecordExample" resultMap="BaseResultMap">
     select
@@ -105,9 +106,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into ums_invite_record (user_id, invite_code, user_id_invited, 
-      reward_point, create_time)
+      reward_point, create_time, username_invited
+      )
     values (#{userId,jdbcType=BIGINT}, #{inviteCode,jdbcType=VARCHAR}, #{userIdInvited,jdbcType=BIGINT}, 
-      #{rewardPoint,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
+      #{rewardPoint,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{usernameInvited,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.macro.mall.model.UmsInviteRecord">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -130,6 +133,9 @@
       <if test="createTime != null">
         create_time,
       </if>
+      <if test="usernameInvited != null">
+        username_invited,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="userId != null">
@@ -146,6 +152,9 @@
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="usernameInvited != null">
+        #{usernameInvited,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -176,6 +185,9 @@
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.usernameInvited != null">
+        username_invited = #{record.usernameInvited,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -188,7 +200,8 @@
       invite_code = #{record.inviteCode,jdbcType=VARCHAR},
       user_id_invited = #{record.userIdInvited,jdbcType=BIGINT},
       reward_point = #{record.rewardPoint,jdbcType=INTEGER},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      username_invited = #{record.usernameInvited,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -211,6 +224,9 @@
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="usernameInvited != null">
+        username_invited = #{usernameInvited,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -220,7 +236,8 @@
       invite_code = #{inviteCode,jdbcType=VARCHAR},
       user_id_invited = #{userIdInvited,jdbcType=BIGINT},
       reward_point = #{rewardPoint,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP}
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      username_invited = #{usernameInvited,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

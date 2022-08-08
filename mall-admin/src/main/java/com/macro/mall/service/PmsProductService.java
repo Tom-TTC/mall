@@ -1,5 +1,8 @@
 package com.macro.mall.service;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageInfo;
+import com.macro.mall.common.api.CommonPage;
 import com.macro.mall.domain.dto.PmsProductParam;
 import com.macro.mall.domain.dto.PmsProductQueryParam;
 import com.macro.mall.domain.vo.PmsProductIds;

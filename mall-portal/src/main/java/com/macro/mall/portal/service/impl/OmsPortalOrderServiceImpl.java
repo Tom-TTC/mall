@@ -5,22 +5,22 @@ import com.macro.mall.common.api.CommonPage;
 import com.macro.mall.common.domain.CommonConstant;
 import com.macro.mall.common.domain.OrderConstant;
 import com.macro.mall.common.exception.Asserts;
-import com.macro.mall.common.service.TTCRedisService;
 import com.macro.mall.common.utils.DateUtils;
-import com.macro.mall.mapper.*;
-import com.macro.mall.model.*;
+import com.macro.mall.mapper.OmsOrderMapper;
+import com.macro.mall.model.OmsOrder;
+import com.macro.mall.model.OmsOrderExample;
+import com.macro.mall.model.UmsMember;
 import com.macro.mall.model.vo.OrderDetail;
 import com.macro.mall.portal.dao.PortalOrderDao;
-import com.macro.mall.portal.dao.PortalOrderItemDao;
-import com.macro.mall.portal.domain.*;
+import com.macro.mall.portal.domain.OrderParam;
 import com.macro.mall.portal.domain.vo.PmsPortalProductDetail;
 import com.macro.mall.portal.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.util.*;
+import java.util.List;
 
 /**
  * 前台订单管理Service
@@ -44,14 +44,17 @@ public class OmsPortalOrderServiceImpl implements OmsPortalOrderService {
     private PmsPortalProductService productService;
 
     @Override
+    @Transactional
     public String generateOrder(OrderParam orderParam) {
         //获取购物车及优惠信息
         UmsMember currentMember = memberService.getCurrentMember();
         orderParam.setMemberId(currentMember.getId());
         orderParam.setMemberName(currentMember.getUsername());
+        PmsPortalProductDetail productDetail = checkProduct(orderParam.getProductId());
         OmsOrder order = new OmsOrder(orderParam.getProductId(),
                 orderParam.getMemberId(),
                 orderParam.getMemberName(),
+                productDetail.getCreateUserId(),
                 orderParam.getWechatAccount(),
                 orderParam.getReceiverName(),
                 orderParam.getReceiverPhone(),
@@ -62,11 +65,22 @@ public class OmsPortalOrderServiceImpl implements OmsPortalOrderService {
         return order.getOrderSn();
     }
 
+    /**
+     * 判断商品是否存在
+     *
+     * @param productId
+     */
+    private PmsPortalProductDetail checkProduct(Long productId) {
+        PmsPortalProductDetail productDetail = productService.detail(productId);
+        return productDetail;
+    }
+
     @Override
+    @Transactional
     public void cancelOrder(String orderSn) {
         //查询待处理的订单
         OmsOrder cancelOrder = getOrderBySnWithCheck(orderSn);
-        if (cancelOrder.getStatus() == OrderConstant.ORDER_TO_BE_CONFIRMED) {
+        if (cancelOrder.getStatus() != OrderConstant.ORDER_TO_BE_CONFIRMED) {
             Asserts.fail(OrderConstant.ORDER_CAN_NOT_CANCEL);
         }
         //修改订单状态为取消
@@ -103,6 +117,7 @@ public class OmsPortalOrderServiceImpl implements OmsPortalOrderService {
     }
 
     @Override
+    @Transactional
     public void deleteOrder(String orderSn) {
         OmsOrder order = getOrderBySnWithCheck(orderSn);
         if (order.getStatus() == OrderConstant.ORDER_REFUSED

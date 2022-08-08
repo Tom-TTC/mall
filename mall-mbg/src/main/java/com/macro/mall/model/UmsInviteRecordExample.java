@@ -474,6 +474,76 @@ public class UmsInviteRecordExample {
             addCriterion("create_time not between", value1, value2, "createTime");
             return (Criteria) this;
         }
+
+        public Criteria andUsernameInvitedIsNull() {
+            addCriterion("username_invited is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameInvitedIsNotNull() {
+            addCriterion("username_invited is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameInvitedEqualTo(String value) {
+            addCriterion("username_invited =", value, "usernameInvited");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameInvitedNotEqualTo(String value) {
+            addCriterion("username_invited <>", value, "usernameInvited");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameInvitedGreaterThan(String value) {
+            addCriterion("username_invited >", value, "usernameInvited");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameInvitedGreaterThanOrEqualTo(String value) {
+            addCriterion("username_invited >=", value, "usernameInvited");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameInvitedLessThan(String value) {
+            addCriterion("username_invited <", value, "usernameInvited");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameInvitedLessThanOrEqualTo(String value) {
+            addCriterion("username_invited <=", value, "usernameInvited");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameInvitedLike(String value) {
+            addCriterion("username_invited like", value, "usernameInvited");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameInvitedNotLike(String value) {
+            addCriterion("username_invited not like", value, "usernameInvited");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameInvitedIn(List<String> values) {
+            addCriterion("username_invited in", values, "usernameInvited");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameInvitedNotIn(List<String> values) {
+            addCriterion("username_invited not in", values, "usernameInvited");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameInvitedBetween(String value1, String value2) {
+            addCriterion("username_invited between", value1, value2, "usernameInvited");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameInvitedNotBetween(String value1, String value2) {
+            addCriterion("username_invited not between", value1, value2, "usernameInvited");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

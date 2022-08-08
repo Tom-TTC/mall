@@ -1,8 +1,18 @@
 package com.macro.mall.model;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+import org.springframework.util.StringUtils;
+
 import java.io.Serializable;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Accessors(chain = true)
 public class UmsAdminInfo implements Serializable {
     @ApiModelProperty(value = "管理员id（与ums_admin表一致）")
     private Long id;
@@ -16,8 +26,8 @@ public class UmsAdminInfo implements Serializable {
     @ApiModelProperty(value = "自我介绍")
     private String intro;
 
-    @ApiModelProperty(value = "管理员名称")
-    private String name;
+    @ApiModelProperty(value = "管理员账号名称")
+    private String username;
 
     @ApiModelProperty(value = "擅长领域，逗号隔开")
     private String skilledDomain;
@@ -25,79 +35,21 @@ public class UmsAdminInfo implements Serializable {
     @ApiModelProperty(value = "管理员头像")
     private String headIcon;
 
-    private static final long serialVersionUID = 1L;
+    @ApiModelProperty(value = "管理员昵称")
+    private String nickname;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
+    public UmsAdminInfo(Long id, String intro, String skilledDomain, String headIcon, String nickname) {
         this.id = id;
-    }
-
-    public String getInviteCode() {
-        return inviteCode;
-    }
-
-    public void setInviteCode(String inviteCode) {
-        this.inviteCode = inviteCode;
-    }
-
-    public Integer getRewardPoint() {
-        return rewardPoint;
-    }
-
-    public void setRewardPoint(Integer rewardPoint) {
-        this.rewardPoint = rewardPoint;
-    }
-
-    public String getIntro() {
-        return intro;
-    }
-
-    public void setIntro(String intro) {
         this.intro = intro;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSkilledDomain() {
-        return skilledDomain;
-    }
-
-    public void setSkilledDomain(String skilledDomain) {
         this.skilledDomain = skilledDomain;
-    }
-
-    public String getHeadIcon() {
-        return headIcon;
-    }
-
-    public void setHeadIcon(String headIcon) {
         this.headIcon = headIcon;
+        this.nickname = nickname;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", inviteCode=").append(inviteCode);
-        sb.append(", rewardPoint=").append(rewardPoint);
-        sb.append(", intro=").append(intro);
-        sb.append(", name=").append(name);
-        sb.append(", skilledDomain=").append(skilledDomain);
-        sb.append(", headIcon=").append(headIcon);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
+    public String getNickname() {
+        if (StringUtils.isEmpty(nickname)) {
+            return username;
+        }
+        return nickname;
     }
 }

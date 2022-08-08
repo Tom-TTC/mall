@@ -1,5 +1,6 @@
 package com.macro.mall.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -21,6 +22,7 @@ public class OmsOrderOperateHistory implements Serializable {
     private Integer orderStatus;
 
     @ApiModelProperty(value = "操作时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private LocalDateTime createTime;
 
     @ApiModelProperty(value = "备注")

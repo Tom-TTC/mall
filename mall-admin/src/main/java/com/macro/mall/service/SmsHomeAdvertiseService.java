@@ -1,5 +1,6 @@
 package com.macro.mall.service;
 
+import com.macro.mall.domain.vo.SmsHomeAdvertiseRequest;
 import com.macro.mall.model.SmsHomeAdvertise;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public interface SmsHomeAdvertiseService {
     /**
      * 添加广告
      */
-    int create(SmsHomeAdvertise advertise);
+    Long create(SmsHomeAdvertiseRequest advertise);
 
     /**
      * 批量删除广告
@@ -32,10 +33,10 @@ public interface SmsHomeAdvertiseService {
     /**
      * 更新广告
      */
-    int update(Long id, SmsHomeAdvertise advertise);
+    int update(SmsHomeAdvertiseRequest request);
 
     /**
      * 分页查询广告
      */
-    List<SmsHomeAdvertise> list(String name, Integer type, String endTime, Integer pageSize, Integer pageNum);
+    List<SmsHomeAdvertise> list(Long adminId,String name, Integer pageSize, Integer pageNum);
 }

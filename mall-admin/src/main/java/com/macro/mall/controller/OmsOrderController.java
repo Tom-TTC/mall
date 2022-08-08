@@ -34,7 +34,7 @@ public class OmsOrderController {
         return CommonResult.success(CommonPage.restPage(orderList));
     }
 
-    @ApiOperation("同样或拒绝寄样")
+    @ApiOperation("同意或拒绝寄样")
     @RequestMapping(value = "/update/delivery", method = RequestMethod.POST)
     public CommonResult delivery(@Valid @RequestBody OmsOrderHandleParam handleParam) {
         int count = orderService.handle(handleParam);

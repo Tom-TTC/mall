@@ -3,12 +3,19 @@ package com.macro.mall.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
-import com.macro.mall.domain.bo.AdminUserDetails;
+import com.google.common.collect.Lists;
+import com.macro.mall.common.domain.CommonConstant;
 import com.macro.mall.common.exception.Asserts;
 import com.macro.mall.common.util.RequestUtil;
+import com.macro.mall.common.utils.DateUtils;
+import com.macro.mall.dao.UmsAdminInfoDao;
 import com.macro.mall.dao.UmsAdminRoleRelationDao;
+import com.macro.mall.domain.bo.AdminUserDetails;
 import com.macro.mall.domain.dto.UmsAdminParam;
 import com.macro.mall.domain.dto.UpdateAdminPasswordParam;
+import com.macro.mall.domain.vo.UmsAdminInfoRequest;
+import com.macro.mall.domain.vo.UmsAdminInfoResponse;
+import com.macro.mall.mapper.UmsAdminInfoMapper;
 import com.macro.mall.mapper.UmsAdminLoginLogMapper;
 import com.macro.mall.mapper.UmsAdminMapper;
 import com.macro.mall.mapper.UmsAdminRoleRelationMapper;
@@ -16,10 +23,12 @@ import com.macro.mall.model.*;
 import com.macro.mall.security.util.JwtTokenUtil;
 import com.macro.mall.service.UmsAdminCacheService;
 import com.macro.mall.service.UmsAdminService;
+import com.macro.mall.service.UmsInviteRecordService;
+import com.macro.mall.utils.CommonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,6 +36,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -59,6 +69,20 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     @Autowired
     private UmsAdminCacheService adminCacheService;
 
+    @Autowired
+    private UmsAdminInfoMapper adminInfoMapper;
+    @Autowired
+    private UmsAdminInfoDao adminInfoDao;
+
+    @Autowired
+    private UmsInviteRecordService inviteRecordService;
+
+    @Value("${admin.reward-point-added}")
+    private int rewardPointAdded;
+
+    @Value("${admin.reward-point}")
+    private int rewardPoint;
+
     @Override
     public UmsAdmin getAdminByUsername(String username) {
         UmsAdmin admin = adminCacheService.getAdmin(username);
@@ -74,25 +98,65 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         return null;
     }
 
+    @Transactional
     @Override
-    public UmsAdmin register(UmsAdminParam umsAdminParam) {
-        UmsAdmin umsAdmin = new UmsAdmin();
-        BeanUtils.copyProperties(umsAdminParam, umsAdmin);
-        umsAdmin.setCreateTime(new Date());
-        umsAdmin.setStatus(1);
+    public Long register(UmsAdminParam umsAdminParam) {
+        //查询邀请码是否有效
+        UmsAdminInfoExample adminInfoExample = new UmsAdminInfoExample();
+        adminInfoExample.createCriteria()
+                .andInviteCodeEqualTo(umsAdminParam.getInviteCode());
+        List<UmsAdminInfo> adminInfos = adminInfoMapper.selectByExample(adminInfoExample);
+        if (CollectionUtils.isEmpty(adminInfos)) {
+            Asserts.fail(CommonConstant.INVITE_CODE_ERROR);
+        }
+
+        //插入团长账号
+        UmsAdmin umsAdmin = new UmsAdmin(umsAdminParam.getUsername(),
+                umsAdminParam.getPassword(),
+                umsAdminParam.getEmail());
+
         //查询是否有相同用户名的用户
         UmsAdminExample example = new UmsAdminExample();
         example.createCriteria().andUsernameEqualTo(umsAdmin.getUsername());
         List<UmsAdmin> umsAdminList = adminMapper.selectByExample(example);
         if (umsAdminList.size() > 0) {
-            return null;
+            Asserts.fail(CommonConstant.USER_EXISTED);
         }
         //将密码进行加密操作
         String encodePassword = passwordEncoder.encode(umsAdmin.getPassword());
         umsAdmin.setPassword(encodePassword);
         adminMapper.insert(umsAdmin);
-        return umsAdmin;
+
+        //增加团长权限
+        this.updateRole(umsAdmin.getId(), Lists.newArrayList(CommonConstant.ROLE_TUANZHANG));
+
+        //增加adminInfo及积分初始化
+        UmsAdminInfoRequest request = new UmsAdminInfoRequest()
+                .setId(umsAdmin.getId())
+                .setUsername(umsAdmin.getUsername())
+                .setNickname(umsAdmin.getUsername());
+        this.saveAdminInfo(request);
+
+        //增加邀请记录
+        UmsInviteRecord inviteRecord = new UmsInviteRecord()
+                .setUserId(adminInfos.get(0).getId())
+                .setInviteCode(umsAdminParam.getInviteCode())
+                .setUserIdInvited(umsAdmin.getId())
+                .setUsernameInvited(umsAdmin.getUsername())
+                .setCreateTime(DateUtils.getCurrentTime())
+                .setRewardPoint(rewardPointAdded);
+        inviteRecordService.addInviteRecord(inviteRecord);
+
+        //增加邀请人的积分
+        adminInfoDao.incUserRewardPoint(adminInfos.get(0).getId(),rewardPointAdded);
+        /*UmsAdminInfoRequest rewardPointRequest = new UmsAdminInfoRequest()
+                .setId(adminInfos.get(0).getId())
+                .setRewardPoint(rewardPointAdded);
+        updateAdminRewardPoint(rewardPointRequest);*/
+
+        return umsAdmin.getId();
     }
+
 
     @Override
     public String login(String username, String password) {
@@ -145,7 +209,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
      */
     private void updateLoginTimeByUsername(String username) {
         UmsAdmin record = new UmsAdmin();
-        record.setLoginTime(new Date());
+        record.setLoginTime(DateUtils.getCurrentTime());
         UmsAdminExample example = new UmsAdminExample();
         example.createCriteria().andUsernameEqualTo(username);
         adminMapper.updateByExampleSelective(record, example);
@@ -174,6 +238,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     }
 
     @Override
+    @Transactional
     public int update(Long id, UmsAdmin admin) {
         admin.setId(id);
         UmsAdmin rawAdmin = adminMapper.selectByPrimaryKey(id);
@@ -194,6 +259,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     }
 
     @Override
+    @Transactional
     public int delete(Long id) {
         adminCacheService.delAdmin(id);
         int count = adminMapper.deleteByPrimaryKey(id);
@@ -202,6 +268,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     }
 
     @Override
+    @Transactional
     public int updateRole(Long adminId, List<Long> roleIds) {
         int count = roleIds == null ? 0 : roleIds.size();
         //先删除原来的关系
@@ -242,6 +309,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     }
 
     @Override
+    @Transactional
     public int updatePassword(UpdateAdminPasswordParam param) {
         if (StrUtil.isEmpty(param.getUsername())
                 || StrUtil.isEmpty(param.getOldPassword())
@@ -273,5 +341,71 @@ public class UmsAdminServiceImpl implements UmsAdminService {
             return new AdminUserDetails(admin, resourceList);
         }
         throw new UsernameNotFoundException("用户名或密码错误");
+    }
+
+    @Override
+    public UmsAdminInfoResponse getAdminInfo(Long adminId) {
+        UmsAdminInfo adminInfo = adminInfoMapper.selectByPrimaryKey(adminId);
+        return new UmsAdminInfoResponse(adminInfo);
+    }
+
+    @Override
+    @Transactional
+    public Long saveAdminInfo(UmsAdminInfoRequest request) {
+        String inviteCode = null;
+        UmsAdminInfoExample adminInfoExample = null;
+        long count = 0;
+        for (int i = 0; i < 3; i++) {
+            inviteCode = CommonUtils.generateMixString(6);
+            adminInfoExample = new UmsAdminInfoExample();
+            adminInfoExample.createCriteria()
+                    .andInviteCodeEqualTo(inviteCode);
+            count = adminInfoMapper.countByExample(adminInfoExample);
+            if (count == 0) {
+                break;
+            }
+        }
+        if (inviteCode == null) {
+            Asserts.fail(CommonConstant.INVITE_CODE_FAILED);
+        }
+        UmsAdminInfo adminInfo = new UmsAdminInfo(request.getId(),
+                inviteCode,
+                rewardPoint,
+                request.getIntro(),
+                request.getUsername(),
+                request.getSkilledDomain(),
+                request.getHeadIcon(),
+                request.getNickname());
+        adminInfoMapper.insert(adminInfo);
+        return adminInfo.getId();
+    }
+
+    @Override
+    @Transactional
+    public Long updateAdminInfo(UmsAdminInfoRequest request) {
+        UmsAdminInfo adminInfo = new UmsAdminInfo(request.getId(),
+                StringUtils.isEmpty(request.getIntro()) ? null : request.getIntro(),
+                StringUtils.isEmpty(request.getSkilledDomain()) ? null : request.getSkilledDomain(),
+                StringUtils.isEmpty(request.getHeadIcon()) ? null : request.getHeadIcon(),
+                StringUtils.isEmpty(request.getNickname()) ? null : request.getNickname()
+        );
+        adminInfoMapper.updateByPrimaryKeySelective(adminInfo);
+        return request.getId();
+    }
+
+    @Override
+    @Transactional
+    public Long updateAdminRewardPoint(UmsAdminInfoRequest request) {
+        UmsAdminInfo adminInfo = new UmsAdminInfo()
+                .setRewardPoint(request.getRewardPoint())
+                .setId(request.getId());
+        adminInfoMapper.updateByPrimaryKeySelective(adminInfo);
+        return request.getId();
+    }
+
+    @Override
+    public List<UmsInviteRecord> getInviteRecord(Long adminId, int pageNum, int pageSize) {
+        List<UmsInviteRecord> result = inviteRecordService.listInviteRecords(adminId, pageNum, pageSize);
+        return result;
     }
 }

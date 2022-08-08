@@ -20,7 +20,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 public class PmsProductParam {
 
-    @ApiModelProperty(value = "商品id，更新接口必传", required = false)
+    @ApiModelProperty(value = "商品id，创建订单不传，更新接口必传", required = false)
     @NotNull(message = "商品id不能为空", groups = {Operation.Update.class})
     @Min(value = 1, message = "商品id无效", groups = {Operation.Update.class})
     private Long id;
@@ -44,6 +44,10 @@ public class PmsProductParam {
     @ApiModelProperty(value = "主图链接，最多5张，以英文逗号拼接")
     @NotBlank(message = "主图链接不能为空")
     private String albumPics;
+
+    @ApiModelProperty(value = "直播手卡链接，最多5张，以英文逗号拼接")
+    @NotBlank(message = "直播手卡链接不能为空")
+    private String pics;
 
     @ApiModelProperty(value = "商品详情网页内容")
     private String detailHtml;

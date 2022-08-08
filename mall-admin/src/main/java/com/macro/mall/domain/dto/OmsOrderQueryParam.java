@@ -17,7 +17,7 @@ public class OmsOrderQueryParam {
     private String orderSn;
     @ApiModelProperty(value = "收货人姓名/号码")
     private String receiverKeyword;
-    @ApiModelProperty(value = "订单状态：0->待付款；1->待发货；2->已发货；3->已完成；4->已关闭；5->无效订单")
+    @ApiModelProperty(value = "订单状态：0->待确认；1->已寄件；2->已拒绝；3->已取消")
     private Integer status;
     @ApiModelProperty(value = "订单提交时间")
     private String createTime;

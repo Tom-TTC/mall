@@ -1,6 +1,9 @@
 package com.macro.mall.portal.service;
 
 import com.macro.mall.model.UmsMember;
+import com.macro.mall.portal.domain.vo.UmsMemberHeadRequest;
+import com.macro.mall.portal.domain.vo.UmsMemberInfo;
+import com.macro.mall.portal.domain.vo.UmsMemberPasswordRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +37,20 @@ public interface UmsMemberService {
      * 修改密码
      */
     @Transactional
-    void updatePassword(String telephone, String password, String authCode);
+    void updatePassword(UmsMemberPasswordRequest passwordRequest);
+
+    /**
+     * 更新头像
+     */
+    @Transactional
+    void updateHeadIcon(UmsMember umsMember, UmsMemberHeadRequest headRequest);
+
+    /**
+     * 获取当前登录的用户详情
+     *
+     * @return
+     */
+    UmsMemberInfo getMemberInfo(UmsMember umsMember);
 
     /**
      * 获取当前登录会员
@@ -43,15 +59,10 @@ public interface UmsMemberService {
 
     /**
      * 获取当前登录会员id
+     *
      * @return
      */
     Long getCurrentMemberId();
-
-    /**
-     * 根据会员id修改会员积分
-     */
-    void updateIntegration(Long id,Integer integration);
-
 
     /**
      * 获取用户信息

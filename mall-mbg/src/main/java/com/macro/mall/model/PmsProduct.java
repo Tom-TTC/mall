@@ -1,6 +1,7 @@
 package com.macro.mall.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.macro.mall.common.domain.CommonConstant;
 import com.macro.mall.common.domain.ProductConstant;
@@ -16,6 +17,8 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(value = {"deleteStatus","newStatus","recommandStatus",
+        "sort","sale","promotionPrice","originalPrice","createUserId"})
 public class PmsProduct implements Serializable {
     private Long id;
 
@@ -57,6 +60,9 @@ public class PmsProduct implements Serializable {
 
     @ApiModelProperty(value = "商品价格")
     private BigDecimal price;
+
+    @ApiModelProperty(value = "佣金比例，0-100之间的整数")
+    private Integer rebateRate;
 
     @ApiModelProperty(value = "促销价格")
     private BigDecimal promotionPrice;
@@ -100,8 +106,11 @@ public class PmsProduct implements Serializable {
                       String productCategoryName,
                       String name,
                       String shopName,
+                      BigDecimal price,
+                      Integer rebateRate,
                       String productLink,
                       String albumPics,
+                      String pics,
                       Long createUserId,
                       String detailHtml,
                       String productSn) {
@@ -110,8 +119,11 @@ public class PmsProduct implements Serializable {
         this.productCategoryName = productCategoryName;
         this.name = name;
         this.shopName = shopName;
+        this.price = price;
+        this.rebateRate = rebateRate;
         this.productLink = productLink;
         this.albumPics = albumPics;
+        this.pic = pics;
         this.createUserId = createUserId;
         this.detailHtml = detailHtml;
         this.productSn = productSn;

@@ -1,7 +1,5 @@
 package com.macro.mall.service.impl;
 
-import afu.org.checkerframework.checker.oigj.qual.O;
-import cn.hutool.log.Log;
 import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Lists;
 import com.macro.mall.common.domain.OrderConstant;
@@ -10,21 +8,23 @@ import com.macro.mall.common.utils.DateUtils;
 import com.macro.mall.dao.OmsOrderDao;
 import com.macro.mall.dao.OmsOrderOperateHistoryDao;
 import com.macro.mall.domain.bo.AdminUserDetails;
-import com.macro.mall.domain.dto.*;
+import com.macro.mall.domain.dto.OmsOrderHandleParam;
+import com.macro.mall.domain.dto.OmsOrderNoteParam;
+import com.macro.mall.domain.dto.OmsOrderQueryParam;
+import com.macro.mall.domain.dto.OmsReceiverInfoParam;
 import com.macro.mall.mapper.OmsOrderMapper;
 import com.macro.mall.mapper.OmsOrderOperateHistoryMapper;
 import com.macro.mall.model.OmsOrder;
 import com.macro.mall.model.OmsOrderExample;
 import com.macro.mall.model.OmsOrderOperateHistory;
-import com.macro.mall.model.UmsAdmin;
 import com.macro.mall.model.vo.OrderDetail;
-import com.macro.mall.service.LoginUtils;
+import com.macro.mall.utils.LoginUtils;
 import com.macro.mall.service.OmsOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,7 +63,18 @@ public class OmsOrderServiceImpl implements OmsOrderService {
         //订单当前状态必须是待处理
         handleParam.setCurrentStatusList(OrderConstant.ORDER_TO_BE_CONFIRMED + "");
         AdminUserDetails userDetails = checkAdminOrder(handleParam);
-
+        if (OrderConstant.ORDER_HANDLED == handleParam.getOrderStatus()) {
+            //如果同意，则快递编号不能为空
+            if (StringUtils.isEmpty(handleParam.getDeliverySn())) {
+                Asserts.fail(OrderConstant.DELIVERY_SN_INVALID);
+            }
+            handleParam.setDeliveryTime(DateUtils.getCurrentTime());
+        } else if (OrderConstant.ORDER_REFUSED == handleParam.getOrderStatus()) {
+            //如果拒绝，则拒绝原因不能为空
+            if (StringUtils.isEmpty(handleParam.getDenyReason())) {
+                Asserts.fail(OrderConstant.DENY_REASON_INVALID);
+            }
+        }
         //批量发货
         int count = orderDao.delivery(handleParam);
         //添加操作记录
@@ -140,6 +151,7 @@ public class OmsOrderServiceImpl implements OmsOrderService {
                 .map(String::valueOf)
                 .collect(Collectors.joining(","));
         handleParam.setCurrentStatusList(currentStatusList);
+        handleParam.setOrderSn(receiverInfoParam.getOrderSn());
         AdminUserDetails user = checkAdminOrder(handleParam);
 
         //2.更新订单

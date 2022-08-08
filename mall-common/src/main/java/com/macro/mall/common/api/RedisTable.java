@@ -7,17 +7,18 @@ package com.macro.mall.common.api;
  * @desc ...
  */
 public enum RedisTable {
-    UmsAdmin("ums:admin","后台用户信息"),
-    UmsResourceList("ums:resourceList","后台资源列表"),
-    UmsAdminToken("ums:token","后台用户token"),
-    UmsAdminUserToken("ums:user-token","后台用户与token对应关系"),
+    UmsAdmin("ums:admin", "后台用户信息"),
+    UmsResourceList("ums:resourceList", "后台资源列表"),
+    UmsAdminToken("ums:token", "后台用户token"),
+    UmsAdminUserToken("ums:user-token", "后台用户与token对应关系"),
+    UmsAdminInviteCode("ums:invite-code", "邀请码与用户id的关系"),
 
+    UmsAuthCode("ums:authCode", "验证码"),
+    UmsMember("ums:member", "订单id"),
 
-    UmsAuthCode("ums:authCode","验证码"),
-    UmsMember("ums:member","订单id"),
+    OmsOrderId("oms:orderId", "订单id"),
+    PmsProductCategory("pms:categoryId", "商品类型id"),
 
-    OmsOrderId("oms:orderId","订单id"),
-    PmsProductCategory("pms:categoryId","商品类型id"),
 
     ;
 

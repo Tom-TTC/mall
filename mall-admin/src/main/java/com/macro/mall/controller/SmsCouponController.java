@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -18,7 +19,8 @@ import java.util.List;
  * Created by macro on 2018/8/28.
  */
 @Controller
-@Api(tags = "优惠券管理", description = "优惠券管理")
+@ApiIgnore
+@Api(tags = "优惠券管理", description = "优惠券管理",hidden = true)
 @RequestMapping("/coupon")
 public class SmsCouponController {
     @Autowired

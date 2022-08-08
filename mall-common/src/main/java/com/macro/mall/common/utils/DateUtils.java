@@ -1,6 +1,5 @@
 package com.macro.mall.common.utils;
 
-import org.apache.tomcat.jni.Local;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -8,7 +7,6 @@ import org.springframework.util.StringUtils;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -23,7 +21,7 @@ public class DateUtils {
     /**
      * 日期格式
      */
-    public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    public static final String DATE_FORMAT_WITH_SECOND = "yyyy-MM-dd HH:mm:ss";
 
     private static long startTime = -1;
     private static long endTime = -1;
@@ -675,6 +673,16 @@ public class DateUtils {
      */
     public static LocalDateTime parseTime(String dateTime) {
         return LocalDateTime.parse(dateTime, ORDINARY_TIME_PATTERN);
+    }
+
+    /**
+     * yyyy-MM-dd HH:mm 转换成LocalDateTime
+     *
+     * @param dateTime
+     * @return
+     */
+    public static LocalDateTime parseTimeWithSec(String dateTime) {
+        return LocalDateTime.parse(dateTime, DEFAULT_TIME_PATTERN);
     }
 
     /**

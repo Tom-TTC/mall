@@ -3,16 +3,17 @@ package com.macro.mall.portal.controller;
 import com.macro.mall.common.api.CommonResult;
 import com.macro.mall.model.LoginParam;
 import com.macro.mall.model.UmsMember;
+import com.macro.mall.portal.domain.vo.UmsMemberPasswordRequest;
 import com.macro.mall.portal.service.UmsMemberService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +22,7 @@ import java.util.Map;
  * 会员登录注册管理Controller
  * Created by macro on 2018/8/3.
  */
-@Controller
+@RestController
 @Api(tags = "会员登录注册管理", description = "会员登录注册管理")
 @RequestMapping("/sso")
 public class UmsMemberController {
@@ -34,7 +35,6 @@ public class UmsMemberController {
 
     @ApiOperation("会员注册")
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    @ResponseBody
     public CommonResult register(@RequestParam String username,
                                  @RequestParam String password,
                                  @RequestParam String telephone,
@@ -45,7 +45,6 @@ public class UmsMemberController {
 
     @ApiOperation("会员登录")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    @ResponseBody
     public CommonResult login(@Validated @RequestBody LoginParam loginParam) {
         String token = memberService.login(loginParam.getUsername(), loginParam.getPassword());
         if (token == null) {
@@ -57,39 +56,15 @@ public class UmsMemberController {
         return CommonResult.success(tokenMap);
     }
 
-    @ApiOperation("获取会员信息")
-    @RequestMapping(value = "/info", method = RequestMethod.GET)
-    @ResponseBody
-    public CommonResult info(Principal principal) {
-        if (principal == null) {
-            return CommonResult.unauthorized(null);
-        }
-        UmsMember member = memberService.getCurrentMember();
-        return CommonResult.success(member);
-    }
-
     @ApiOperation("获取验证码")
     @RequestMapping(value = "/getAuthCode", method = RequestMethod.GET)
-    @ResponseBody
-    public CommonResult getAuthCode(@RequestParam String telephone) {
+    public CommonResult<String> getAuthCode(@RequestParam String telephone) {
         String authCode = memberService.generateAuthCode(telephone);
         return CommonResult.success(authCode, "获取验证码成功");
     }
 
-    @ApiOperation("会员修改密码")
-    @RequestMapping(value = "/updatePassword", method = RequestMethod.POST)
-    @ResponseBody
-    public CommonResult updatePassword(@RequestParam String telephone,
-                                       @RequestParam String password,
-                                       @RequestParam String authCode) {
-        memberService.updatePassword(telephone, password, authCode);
-        return CommonResult.success(null, "密码修改成功");
-    }
-
-
     @ApiOperation(value = "刷新token")
     @RequestMapping(value = "/refreshToken", method = RequestMethod.GET)
-    @ResponseBody
     public CommonResult refreshToken(HttpServletRequest request) {
         String token = request.getHeader(tokenHeader);
         String refreshToken = memberService.refreshToken(token);
@@ -100,5 +75,12 @@ public class UmsMemberController {
         tokenMap.put("token", refreshToken);
         tokenMap.put("tokenHead", tokenHead);
         return CommonResult.success(tokenMap);
+    }
+
+    @ApiOperation("会员重置密码")
+    @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
+    public CommonResult updatePassword(@Valid @RequestBody UmsMemberPasswordRequest passwordRequest) {
+        memberService.updatePassword(passwordRequest);
+        return CommonResult.success(null, "密码修改成功");
     }
 }

@@ -1,8 +1,8 @@
 package com.macro.mall.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class PmsProductExample {
@@ -1056,6 +1056,66 @@ public class PmsProductExample {
             return (Criteria) this;
         }
 
+        public Criteria andRebateRateIsNull() {
+            addCriterion("rebate_rate is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRebateRateIsNotNull() {
+            addCriterion("rebate_rate is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRebateRateEqualTo(Integer value) {
+            addCriterion("rebate_rate =", value, "rebateRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andRebateRateNotEqualTo(Integer value) {
+            addCriterion("rebate_rate <>", value, "rebateRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andRebateRateGreaterThan(Integer value) {
+            addCriterion("rebate_rate >", value, "rebateRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andRebateRateGreaterThanOrEqualTo(Integer value) {
+            addCriterion("rebate_rate >=", value, "rebateRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andRebateRateLessThan(Integer value) {
+            addCriterion("rebate_rate <", value, "rebateRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andRebateRateLessThanOrEqualTo(Integer value) {
+            addCriterion("rebate_rate <=", value, "rebateRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andRebateRateIn(List<Integer> values) {
+            addCriterion("rebate_rate in", values, "rebateRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andRebateRateNotIn(List<Integer> values) {
+            addCriterion("rebate_rate not in", values, "rebateRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andRebateRateBetween(Integer value1, Integer value2) {
+            addCriterion("rebate_rate between", value1, value2, "rebateRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andRebateRateNotBetween(Integer value1, Integer value2) {
+            addCriterion("rebate_rate not between", value1, value2, "rebateRate");
+            return (Criteria) this;
+        }
+
         public Criteria andPromotionPriceIsNull() {
             addCriterion("promotion_price is null");
             return (Criteria) this;
@@ -1386,113 +1446,113 @@ public class PmsProductExample {
             return (Criteria) this;
         }
 
-        public Criteria andCreateTimeEqualTo(Date value) {
+        public Criteria andCreateTimeEqualTo(LocalDateTime value) {
             addCriterion("create_time =", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateTimeNotEqualTo(Date value) {
+        public Criteria andCreateTimeNotEqualTo(LocalDateTime value) {
             addCriterion("create_time <>", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateTimeGreaterThan(Date value) {
+        public Criteria andCreateTimeGreaterThan(LocalDateTime value) {
             addCriterion("create_time >", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateTimeGreaterThanOrEqualTo(Date value) {
+        public Criteria andCreateTimeGreaterThanOrEqualTo(LocalDateTime value) {
             addCriterion("create_time >=", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateTimeLessThan(Date value) {
+        public Criteria andCreateTimeLessThan(LocalDateTime value) {
             addCriterion("create_time <", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateTimeLessThanOrEqualTo(Date value) {
+        public Criteria andCreateTimeLessThanOrEqualTo(LocalDateTime value) {
             addCriterion("create_time <=", value, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateTimeIn(List<Date> values) {
+        public Criteria andCreateTimeIn(List<LocalDateTime> values) {
             addCriterion("create_time in", values, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateTimeNotIn(List<Date> values) {
+        public Criteria andCreateTimeNotIn(List<LocalDateTime> values) {
             addCriterion("create_time not in", values, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateTimeBetween(Date value1, Date value2) {
+        public Criteria andCreateTimeBetween(LocalDateTime value1, LocalDateTime value2) {
             addCriterion("create_time between", value1, value2, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreateTimeNotBetween(Date value1, Date value2) {
+        public Criteria andCreateTimeNotBetween(LocalDateTime value1, LocalDateTime value2) {
             addCriterion("create_time not between", value1, value2, "createTime");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateTimeIsNull() {
-            addCriterion("update_time is null");
+        public Criteria andUpLocalDateTimeTimeIsNull() {
+            addCriterion("upLocalDateTime_time is null");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateTimeIsNotNull() {
-            addCriterion("update_time is not null");
+        public Criteria andUpLocalDateTimeTimeIsNotNull() {
+            addCriterion("upLocalDateTime_time is not null");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateTimeEqualTo(Date value) {
-            addCriterion("update_time =", value, "updateTime");
+        public Criteria andUpLocalDateTimeTimeEqualTo(LocalDateTime value) {
+            addCriterion("upLocalDateTime_time =", value, "upLocalDateTimeTime");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateTimeNotEqualTo(Date value) {
-            addCriterion("update_time <>", value, "updateTime");
+        public Criteria andUpLocalDateTimeTimeNotEqualTo(LocalDateTime value) {
+            addCriterion("upLocalDateTime_time <>", value, "upLocalDateTimeTime");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateTimeGreaterThan(Date value) {
-            addCriterion("update_time >", value, "updateTime");
+        public Criteria andUpLocalDateTimeTimeGreaterThan(LocalDateTime value) {
+            addCriterion("upLocalDateTime_time >", value, "upLocalDateTimeTime");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("update_time >=", value, "updateTime");
+        public Criteria andUpLocalDateTimeTimeGreaterThanOrEqualTo(LocalDateTime value) {
+            addCriterion("upLocalDateTime_time >=", value, "upLocalDateTimeTime");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateTimeLessThan(Date value) {
-            addCriterion("update_time <", value, "updateTime");
+        public Criteria andUpLocalDateTimeTimeLessThan(LocalDateTime value) {
+            addCriterion("upLocalDateTime_time <", value, "upLocalDateTimeTime");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateTimeLessThanOrEqualTo(Date value) {
-            addCriterion("update_time <=", value, "updateTime");
+        public Criteria andUpLocalDateTimeTimeLessThanOrEqualTo(LocalDateTime value) {
+            addCriterion("upLocalDateTime_time <=", value, "upLocalDateTimeTime");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateTimeIn(List<Date> values) {
-            addCriterion("update_time in", values, "updateTime");
+        public Criteria andUpLocalDateTimeTimeIn(List<LocalDateTime> values) {
+            addCriterion("upLocalDateTime_time in", values, "upLocalDateTimeTime");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateTimeNotIn(List<Date> values) {
-            addCriterion("update_time not in", values, "updateTime");
+        public Criteria andUpLocalDateTimeTimeNotIn(List<LocalDateTime> values) {
+            addCriterion("upLocalDateTime_time not in", values, "upLocalDateTimeTime");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateTimeBetween(Date value1, Date value2) {
-            addCriterion("update_time between", value1, value2, "updateTime");
+        public Criteria andUpLocalDateTimeTimeBetween(LocalDateTime value1, LocalDateTime value2) {
+            addCriterion("upLocalDateTime_time between", value1, value2, "upLocalDateTimeTime");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateTimeNotBetween(Date value1, Date value2) {
-            addCriterion("update_time not between", value1, value2, "updateTime");
+        public Criteria andUpLocalDateTimeTimeNotBetween(LocalDateTime value1, LocalDateTime value2) {
+            addCriterion("upLocalDateTime_time not between", value1, value2, "upLocalDateTimeTime");
             return (Criteria) this;
         }
     }

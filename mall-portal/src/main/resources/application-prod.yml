@@ -3,9 +3,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://db:3306/mall?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
-    username: reader
-    password: 123456
+    url: jdbc:mysql://db:3306/doutuan_mall?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: dev
+    password: _Doutuan321
     druid:
       initial-size: 5 #连接池初始化大小
       min-idle: 10 #最小空闲连接数
@@ -33,3 +33,5 @@ logging:
 logstash:
   host: logstash
 
+swagger:
+  show: true

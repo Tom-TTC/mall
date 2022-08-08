@@ -5,6 +5,7 @@
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="product_category_id" jdbcType="BIGINT" property="productCategoryId"/>
         <result column="product_category_name" jdbcType="VARCHAR" property="productCategoryName"/>
+        <result column="product_sn" jdbcType="VARCHAR" property="productSn"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="shop_name" jdbcType="VARCHAR" property="shopName"/>
         <result column="publish_status" jdbcType="INTEGER" property="publishStatus"/>
@@ -12,6 +13,7 @@
         <result column="price" jdbcType="DECIMAL" property="price"/>
         <result column="product_link" jdbcType="VARCHAR" property="productLink"/>
         <result column="album_pics" jdbcType="VARCHAR" property="albumPics"/>
+        <result column="create_user_id" jdbcType="BIGINT" property="createUserId"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
         <result column="detail_html" jdbcType="LONGVARCHAR" property="detailHtml"/>
@@ -37,4 +39,25 @@
                  inner JOIN pms_sku_stock s ON s.product_id = p.id
         WHERE p.id = #{id};
     </select>
+
+    <select id="queryFavoriteProducts" resultType="com.macro.mall.portal.domain.vo.UmsMemberFavoriteProductResponse">
+        select
+            up.id id,
+            up.member_id memberId,
+            up.product_id productId,
+            up.admin_id adminId,
+            up.create_time createTime,
+            pp.name productName,
+            pp.price productPrice,
+            pp.rebate_rate rebateRate,
+            pp.publish_status productPublishStatus
+        from ums_member_favorite_product up
+        inner join pms_product pp on up.product_id = pp.id
+        where
+            up.member_id = #{memberId}
+            and
+            up.admin_id = #{adminId}
+        order by up.create_time desc
+    </select>
+
 </mapper>

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -18,7 +19,8 @@ import java.util.List;
  * Created by macro on 2018/10/18.
  */
 @Controller
-@Api(tags = "收货地址管理", description = "收货地址管理")
+@ApiIgnore
+@Api(tags = "收货地址管理", description = "收货地址管理",hidden = true)
 @RequestMapping("/companyAddress")
 public class OmsCompanyAddressController {
     @Autowired

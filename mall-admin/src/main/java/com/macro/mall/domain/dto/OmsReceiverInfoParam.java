@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -14,7 +15,7 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class OmsReceiverInfoParam {
     @ApiModelProperty(value = "订单sn")
-    @NotNull(message = "订单sn不能为空")
+    @NotBlank(message = "订单sn不能为空")
     private String orderSn;
 
     @ApiModelProperty(value = "收货人姓名")

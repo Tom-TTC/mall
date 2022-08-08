@@ -8,13 +8,15 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 订单设置管理Controller
  * Created by macro on 2018/10/16.
  */
 @Controller
-@Api(tags = "订单设置管理", description = "订单设置管理")
+@ApiIgnore
+@Api(tags = "订单设置管理", description = "订单设置管理",hidden = true)
 @RequestMapping("/orderSetting")
 public class OmsOrderSettingController {
     @Autowired

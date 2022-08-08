@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -17,7 +18,8 @@ import java.util.List;
  * Created by macro on 2018/10/17.
  */
 @Controller
-@Api(tags = "退货原因管理", description = "退货原因管理")
+@ApiIgnore
+@Api(tags = "退货原因管理", description = "退货原因管理",hidden = true)
 @RequestMapping("/returnReason")
 public class OmsOrderReturnReasonController {
     @Autowired

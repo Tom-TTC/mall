@@ -1,17 +1,20 @@
 package com.macro.mall.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.macro.mall.common.domain.CommonConstant;
 import com.macro.mall.common.domain.OrderConstant;
 import com.macro.mall.common.utils.DateUtils;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
+@Accessors(chain = true)
 public class OmsOrderBack implements Serializable {
     @ApiModelProperty(value = "订单id")
     private Long id;
@@ -21,6 +24,9 @@ public class OmsOrderBack implements Serializable {
 
     @ApiModelProperty(value = "订单编号")
     private String orderSn;
+
+    @ApiModelProperty(value = "商品创建人id")
+    private Long adminId;
 
     @ApiModelProperty(value = "商品id")
     private Long productId;
@@ -64,31 +70,38 @@ public class OmsOrderBack implements Serializable {
     @ApiModelProperty(value = "订单状态：0->待确认；1->已寄件；2->已拒绝；3->已取消")
     private Integer status;
 
+    @ApiModelProperty(value = "拒绝原因")
+    private String denyReason;
+
     @ApiModelProperty(value = "删除状态：0->未删除；1->已删除")
     private Integer deleteStatus;
 
     @ApiModelProperty(value = "发货时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private LocalDateTime deliveryTime;
 
     @ApiModelProperty(value = "确认收货时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private LocalDateTime receiveTime;
 
     @ApiModelProperty(value = "修改时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private LocalDateTime modifyTime;
 
     @ApiModelProperty(value = "提交时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private LocalDateTime createTime;
 
     private static final long serialVersionUID = 1L;
 
 
     public OmsOrderBack(Long productId,
-                        Long memberId,
-                        String memberUsername,
-                        String wechatAccount,
-                        String receiverName,
-                        String receiverPhone,
-                        String receiverDetailAddress) {
+                    Long memberId,
+                    String memberUsername,
+                    String wechatAccount,
+                    String receiverName,
+                    String receiverPhone,
+                    String receiverDetailAddress) {
         this.productId = productId;
         this.memberId = memberId;
         this.memberUsername = memberUsername;

@@ -5,28 +5,39 @@ import com.google.common.collect.Lists;
 import com.macro.mall.common.domain.CommonConstant;
 import com.macro.mall.common.domain.ProductConstant;
 import com.macro.mall.common.exception.Asserts;
-import com.macro.mall.dao.*;
+import com.macro.mall.common.utils.DateUtils;
+import com.macro.mall.dao.PmsProductDao;
+import com.macro.mall.dao.PmsProductVertifyRecordDao;
+import com.macro.mall.dao.PmsSkuStockDao;
 import com.macro.mall.domain.dto.PmsProductParam;
 import com.macro.mall.domain.dto.PmsProductQueryParam;
-import com.macro.mall.domain.vo.*;
 import com.macro.mall.domain.dto.PmsSkuParam;
-import com.macro.mall.mapper.*;
+import com.macro.mall.domain.vo.*;
+import com.macro.mall.mapper.PmsProductMapper;
+import com.macro.mall.mapper.PmsSkuStockMapper;
+import com.macro.mall.mapper.UmsAdminInfoMapper;
 import com.macro.mall.model.*;
 import com.macro.mall.service.PmsProductCategoryService;
 import com.macro.mall.service.PmsProductService;
+import com.macro.mall.service.UmsAdminInfoService;
 import com.macro.mall.utils.ProductUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Method;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * 商品管理Service实现类
@@ -50,8 +61,29 @@ public class PmsProductServiceImpl implements PmsProductService {
     @Autowired
     private PmsProductCategoryService productCategoryService;
 
+    @Autowired
+    private UmsAdminInfoMapper adminInfoMapper;
+
+    @Value("${admin.reward-point-decreased}")
+    private int rewardPointDecreased;
+
+    @Autowired
+    private UmsAdminInfoService adminInfoService;
+
     @Override
+    @Transactional
     public long create(PmsProductParam productParam) {
+        //判断积分是否足够，足够则扣减
+        long count = adminInfoService.countUserWithEnoughPoint(productParam.getCreateUserId(), rewardPointDecreased);
+        log.info("创建商品参数：{}", productParam);
+        if (count == 1L) {
+            //当前用户的积分足够
+            adminInfoService.decUserRewardPoint(productParam.getCreateUserId(), rewardPointDecreased);
+        } else {
+            //积分不够，抛异常
+            Asserts.fail(CommonConstant.POINT_NOT_ENOUGH);
+        }
+
         //创建商品
         PmsProduct product = prehandleProductParam(productParam);
         product.setId(null);
@@ -62,6 +94,7 @@ public class PmsProductServiceImpl implements PmsProductService {
         List<PmsSkuStock> skuStocks = transformSkuStock(productParam.getSkuList(), productId);
         //添加sku库存信息
         skuStockDao.insertList(skuStocks);
+
         return productId;
     }
 
@@ -92,12 +125,14 @@ public class PmsProductServiceImpl implements PmsProductService {
                 categoryName,
                 productParam.getName(),
                 productParam.getShopName(),
+                productParam.getSkuList().get(0).getPrice(),
+                productParam.getSkuList().get(0).getRebateRate(),
                 productParam.getProductLink(),
                 productParam.getAlbumPics(),
+                productParam.getPics(),
                 productParam.getCreateUserId(),
                 productParam.getDetailHtml(),
                 ProductUtils.getProductSn());
-
         return product;
     }
 
@@ -134,6 +169,7 @@ public class PmsProductServiceImpl implements PmsProductService {
     }
 
     @Override
+    @Transactional
     public long update(PmsProductParam productParam) {
         //预处理参数
         PmsProduct product = prehandleProductParam(productParam);
@@ -168,9 +204,11 @@ public class PmsProductServiceImpl implements PmsProductService {
     @Override
     public List<PmsProduct> list(PmsProductQueryParam productQueryParam, Integer pageSize, Integer pageNum) {
         PageHelper.startPage(pageNum, pageSize);
+        //Page<PmsProduct> page = PageHelper.startPage(pageNum, pageSize);
         PmsProductExample productExample = new PmsProductExample();
         PmsProductExample.Criteria criteria = productExample.createCriteria();
-        criteria.andDeleteStatusEqualTo(0);
+        criteria.andCreateUserIdEqualTo(productQueryParam.getAdminId())
+                .andDeleteStatusEqualTo(0);
         if (productQueryParam.getPublishStatus() != null) {
             criteria.andPublishStatusEqualTo(productQueryParam.getPublishStatus());
         }
@@ -186,7 +224,37 @@ public class PmsProductServiceImpl implements PmsProductService {
         if (productQueryParam.getProductCategoryId() != null) {
             criteria.andProductCategoryIdEqualTo(productQueryParam.getProductCategoryId());
         }
-        return productMapper.selectByExample(productExample);
+
+        if (!StringUtils.isEmpty(productQueryParam.getStartTime())) {
+            LocalDateTime startTime = DateUtils.parseTimeWithSec(productQueryParam.getStartTime());
+            criteria.andCreateTimeGreaterThanOrEqualTo(startTime);
+        }
+
+        if (!StringUtils.isEmpty(productQueryParam.getEndTime())) {
+            LocalDateTime endTime = DateUtils.parseTimeWithSec(productQueryParam.getEndTime());
+            criteria.andCreateTimeLessThanOrEqualTo(endTime);
+        }
+
+        if (Objects.equals(productQueryParam.getSort(), 1)) {
+            productExample.setOrderByClause("rebate_rate " + productQueryParam.getOrder());
+        } else if (Objects.equals(productQueryParam.getSort(), 2)) {
+            productExample.setOrderByClause("price " + productQueryParam.getOrder());
+        } else {
+            productExample.setOrderByClause("id " + productQueryParam.getOrder());
+        }
+
+
+        List<PmsProduct> productList = productMapper.selectByExample(productExample);
+        return productList;
+    }
+
+    private List<PmsProductResponse> postHandleProduct(List<PmsProduct> result) {
+        if (!CollectionUtils.isEmpty(result)) {
+            return result.stream()
+                    .map(PmsProductResponse::new)
+                    .collect(Collectors.toList());
+        }
+        return Lists.newArrayList();
     }
 
     @Override

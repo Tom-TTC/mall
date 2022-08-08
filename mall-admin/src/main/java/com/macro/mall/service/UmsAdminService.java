@@ -2,7 +2,10 @@ package com.macro.mall.service;
 
 import com.macro.mall.domain.dto.UmsAdminParam;
 import com.macro.mall.domain.dto.UpdateAdminPasswordParam;
+import com.macro.mall.domain.vo.UmsAdminInfoRequest;
+import com.macro.mall.domain.vo.UmsAdminInfoResponse;
 import com.macro.mall.model.UmsAdmin;
+import com.macro.mall.model.UmsInviteRecord;
 import com.macro.mall.model.UmsResource;
 import com.macro.mall.model.UmsRole;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,7 +26,7 @@ public interface UmsAdminService {
     /**
      * 注册功能
      */
-    UmsAdmin register(UmsAdminParam umsAdminParam);
+    Long register(UmsAdminParam umsAdminParam);
 
     /**
      * 登录功能
@@ -94,4 +97,43 @@ public interface UmsAdminService {
      * 获取用户信息
      */
     UserDetails loadUserByUsername(String username);
+
+    /**
+     * 获取用户业务信息
+     *
+     * @return
+     */
+    UmsAdminInfoResponse getAdminInfo(Long adminId);
+
+    /**
+     * 保存用户业务信息
+     *
+     * @param request
+     */
+    Long saveAdminInfo(UmsAdminInfoRequest request);
+
+    /**
+     * 更新团长业务信息
+     *
+     * @param request
+     * @return
+     */
+    Long updateAdminInfo(UmsAdminInfoRequest request);
+
+    /**
+     * 更新团长积分
+     * note:扣积分、增长积分
+     *
+     * @param request
+     * @return
+     */
+    Long updateAdminRewardPoint(UmsAdminInfoRequest request);
+
+    /**
+     * 通过团长id获取邀请成功记录
+     *
+     * @param adminId
+     * @return
+     */
+    List<UmsInviteRecord> getInviteRecord(Long adminId, int pageNum, int pageSize);
 }

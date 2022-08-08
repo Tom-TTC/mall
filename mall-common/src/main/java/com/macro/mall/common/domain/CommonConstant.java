@@ -27,8 +27,29 @@ public interface CommonConstant {
     String PRODUCT_CATEGORY_INVALID = "商品分类无效";
 
     String USER_UNLOGIN = "用户未登录或token过期";
+    String USER_EXISTED = "用户已存在";
+
+    String FILE_TYPE_NOT_MATCH = "上传文件类型错误";
+
+    String INVITE_CODE_FAILED = "邀请码生成出错";
+
+    String INVITE_CODE_ERROR = "邀请码无效";
+
+    String POINT_NOT_ENOUGH = "积分不够，请联系客服进行充值";
+
+    String FAVORITE_PRODUCT_ALREADY_ADDED = "产品已收藏，不可重复操作";
+
+    String OPERATE_SUCCESS = "操作成功";
+
+    String AD_NOT_EXIST = "广告不存在";
 
     /**************************其它********************************/
-    Random random=new Random();
+    Random random = new Random();
+
+    int ADVERTISEMENT_FOR_APP = 1;
+    int ADVERTISEMENT_FOR_PC = 0;
+
+    /*************************************************************/
+    long ROLE_TUANZHANG = 8;
 
 }

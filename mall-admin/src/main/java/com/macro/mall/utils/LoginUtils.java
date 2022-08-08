@@ -1,4 +1,4 @@
-package com.macro.mall.service;
+package com.macro.mall.utils;
 
 import com.macro.mall.domain.bo.AdminUserDetails;
 import com.macro.mall.common.domain.CommonConstant;

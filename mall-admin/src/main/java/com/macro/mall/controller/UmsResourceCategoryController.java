@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -16,7 +17,8 @@ import java.util.List;
  * Created by macro on 2020/2/5.
  */
 @Controller
-@Api(tags = "后台资源分类管理", description = "后台资源分类管理")
+@ApiIgnore
+@Api(tags = "后台资源分类管理", description = "后台资源分类管理",hidden = true)
 @RequestMapping("/resourceCategory")
 public class UmsResourceCategoryController {
     @Autowired

@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 退货申请管理Controller
  * Created by macro on 2018/10/17.
  */
 @Controller
+@ApiIgnore
 @Api(tags = "退货申请管理", description = "退货申请管理")
 @RequestMapping("/returnApply")
 public class OmsPortalOrderReturnApplyController {

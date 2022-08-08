@@ -26,18 +26,18 @@
         p.name product_name,
         p.shop_name shop_name
         FROM
-        oms_order o
-        INNER JOIN pms_product p ON o.product_id = p.id
+            oms_order o
+            INNER JOIN pms_product p ON o.product_id = p.id
         WHERE
-        o.member_id = ${memberId}
-        and
-        <if test="status != -1">
-            o.status = ${status}
+            o.member_id = ${memberId}
             and
-        </if>
-        o.delete_status = 0
+            <if test="status != -1">
+                o.status = ${status}
+                and
+            </if>
+            o.delete_status = 0
         ORDER BY
-        o.create_time desc;
+            o.create_time desc
     </select>
 
     <update id="updateOrderStatus">

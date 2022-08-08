@@ -10,6 +10,7 @@ import com.macro.mall.model.UmsAdmin;
 import com.macro.mall.model.UmsRole;
 import com.macro.mall.service.UmsAdminService;
 import com.macro.mall.service.UmsRoleService;
+import com.macro.mall.service.impl.CommonService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,15 +41,17 @@ public class UmsAdminController {
     private UmsAdminService adminService;
     @Autowired
     private UmsRoleService roleService;
+    @Autowired
+    private CommonService commonService;
 
     @ApiOperation(value = "用户注册")
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public CommonResult<UmsAdmin> register(@Validated @RequestBody UmsAdminParam umsAdminParam) {
-        UmsAdmin umsAdmin = adminService.register(umsAdminParam);
-        if (umsAdmin == null) {
+    public CommonResult<Long> register(@Validated @RequestBody UmsAdminParam umsAdminParam) {
+        Long id = adminService.register(umsAdminParam);
+        if (id == null) {
             return CommonResult.failed();
         }
-        return CommonResult.success(umsAdmin);
+        return CommonResult.success(id);
     }
 
     @ApiOperation(value = "登录以后返回token")
@@ -78,7 +81,23 @@ public class UmsAdminController {
         return CommonResult.success(tokenMap);
     }
 
-    @ApiOperation(value = "获取当前登录用户信息")
+    @ApiOperation(value = "获取当前登录用户菜单、权限信息")
+    @RequestMapping(value = "/info", method = RequestMethod.GET)
+    public CommonResult getAdminInfo(Principal principal) {
+        UmsAdmin umsAdmin = commonService.checkLoginUser(principal);
+        Map<String, Object> data = new HashMap<>();
+        data.put("username", umsAdmin.getUsername());
+        data.put("menus", roleService.getMenuList(umsAdmin.getId()));
+        data.put("icon", umsAdmin.getIcon());
+        List<UmsRole> roleList = adminService.getRoleList(umsAdmin.getId());
+        if (CollUtil.isNotEmpty(roleList)) {
+            List<String> roles = roleList.stream().map(UmsRole::getName).collect(Collectors.toList());
+            data.put("roles", roles);
+        }
+        return CommonResult.success(data);
+    }
+
+    /*@ApiOperation(value = "获取当前登录用户信息")
     @RequestMapping(value = "/info", method = RequestMethod.GET)
     public CommonResult getAdminInfo(Principal principal) {
         if (principal == null) {
@@ -96,7 +115,7 @@ public class UmsAdminController {
             data.put("roles", roles);
         }
         return CommonResult.success(data);
-    }
+    }*/
 
     @ApiOperation(value = "登出功能")
     @RequestMapping(value = "/logout", method = RequestMethod.POST)

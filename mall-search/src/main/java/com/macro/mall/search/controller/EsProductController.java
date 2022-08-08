@@ -66,7 +66,7 @@ public class EsProductController {
     @RequestMapping(value = "/search/simple", method = RequestMethod.GET)
     @ResponseBody
     public CommonResult<CommonPage<EsProduct>> search(@RequestParam(required = false) String keyword,
-                                                      @RequestParam(required = false, defaultValue = "0") Integer pageNum,
+                                                      @RequestParam(required = false, defaultValue = "1") Integer pageNum,
                                                       @RequestParam(required = false, defaultValue = "5") Integer pageSize) {
         Page<EsProduct> esProductPage = esProductService.search(keyword, pageNum, pageSize);
         return CommonResult.success(CommonPage.restPage(esProductPage));
@@ -80,7 +80,7 @@ public class EsProductController {
     public CommonResult<CommonPage<EsProduct>> search(@RequestParam(required = false) String keyword,
                                                       @RequestParam(required = false) Long brandId,
                                                       @RequestParam(required = false) Long productCategoryId,
-                                                      @RequestParam(required = false, defaultValue = "0") Integer pageNum,
+                                                      @RequestParam(required = false, defaultValue = "1") Integer pageNum,
                                                       @RequestParam(required = false, defaultValue = "5") Integer pageSize,
                                                       @RequestParam(required = false, defaultValue = "0") Integer sort) {
         Page<EsProduct> esProductPage = esProductService.search(keyword, brandId, productCategoryId, pageNum, pageSize, sort);
@@ -91,7 +91,7 @@ public class EsProductController {
     @RequestMapping(value = "/recommend/{id}", method = RequestMethod.GET)
     @ResponseBody
     public CommonResult<CommonPage<EsProduct>> recommend(@PathVariable Long id,
-                                                         @RequestParam(required = false, defaultValue = "0") Integer pageNum,
+                                                         @RequestParam(required = false, defaultValue = "1") Integer pageNum,
                                                          @RequestParam(required = false, defaultValue = "5") Integer pageSize) {
         Page<EsProduct> esProductPage = esProductService.recommend(id, pageNum, pageSize);
         return CommonResult.success(CommonPage.restPage(esProductPage));

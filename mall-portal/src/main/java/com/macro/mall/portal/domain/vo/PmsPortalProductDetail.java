@@ -1,7 +1,6 @@
 package com.macro.mall.portal.domain.vo;
 
 import com.macro.mall.common.domain.vo.PmsSkuResponse;
-import com.macro.mall.model.*;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,12 +14,18 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class PmsPortalProductDetail{
+public class PmsPortalProductDetail {
     @ApiModelProperty(value = "商品id")
     private Long id;
 
     @ApiModelProperty(value = "商品分类id")
     private Long productCategoryId;
+
+    @ApiModelProperty(value = "货号")
+    private String productSn;
+
+    @ApiModelProperty(value = "创建人id")
+    private Long createUserId;
 
     @ApiModelProperty(value = "商品分类名称")
     private String productCategoryName;
@@ -39,6 +44,9 @@ public class PmsPortalProductDetail{
 
     @ApiModelProperty(value = "商品价格")
     private BigDecimal price;
+
+    @ApiModelProperty(value = "佣金比例，0-100之间的整数")
+    private Integer rebateRate;
 
     @ApiModelProperty(value = "商品链接")
     private String productLink;
