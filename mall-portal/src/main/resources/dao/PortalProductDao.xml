@@ -37,7 +37,8 @@
                s.order       sku_order
         FROM pms_product p
                  inner JOIN pms_sku_stock s ON s.product_id = p.id
-        WHERE p.id = #{id};
+        WHERE
+            p.id = #{id}
     </select>
 
     <select id="queryFavoriteProducts" resultType="com.macro.mall.portal.domain.vo.UmsMemberFavoriteProductResponse">
@@ -49,6 +50,7 @@
             up.create_time createTime,
             pp.name productName,
             pp.price productPrice,
+            pp.album_pics albumPics,
             pp.rebate_rate rebateRate,
             pp.publish_status productPublishStatus
         from ums_member_favorite_product up

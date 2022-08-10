@@ -16,7 +16,7 @@ public interface PmsPortalProductService {
     /**
      * 综合搜索商品
      */
-    List<PmsProduct> search(String keyword, String inviteCode, Long productCategoryId, Integer pageNum, Integer pageSize, Integer sort,String order);
+    List<PmsProduct> search(String keyword, String inviteCode, Long productCategoryId, Integer pageNum, Integer pageSize, Integer sort, String order);
 
     /**
      * 以树形结构获取所有商品分类
@@ -27,6 +27,11 @@ public interface PmsPortalProductService {
      * 获取前台商品详情
      */
     PmsPortalProductDetail detail(Long id);
+
+    /**
+     * 获取前台商品详情，并判断是否已收藏
+     */
+    PmsPortalProductDetail detailWithCollected(Long memberId, Long id);
 
     /**
      * 添加到收藏

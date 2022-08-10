@@ -31,6 +31,9 @@ public class OrderDetail {
     @ApiModelProperty(value = "商品名称")
     private String productName;
 
+    @ApiModelProperty(value = "画册图片，连产品图片限制为5张，以逗号分割")
+    private String albumPics;
+
     @ApiModelProperty(value = "店铺名称")
     private String shopName;
 

@@ -25,6 +25,9 @@ public class UmsMemberFavoriteProductResponse implements Serializable {
     @ApiModelProperty(value = "商品名称")
     private String productName;
 
+    @ApiModelProperty(value = "画册图片，连产品图片限制为5张，以逗号分割")
+    private String albumPics;
+
     @ApiModelProperty(value = "商品价格")
     private BigDecimal productPrice;
 

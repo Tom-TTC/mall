@@ -13,7 +13,7 @@ public interface UmsMemberReceiveAddressService {
     /**
      * 添加收货地址
      */
-    int add(UmsMemberReceiveAddress address);
+    long add(UmsMemberReceiveAddress address);
 
     /**
      * 删除收货地址

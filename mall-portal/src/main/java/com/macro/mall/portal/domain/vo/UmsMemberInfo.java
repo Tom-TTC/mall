@@ -1,5 +1,6 @@
 package com.macro.mall.portal.domain.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.macro.mall.model.UmsMember;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,7 @@ import java.util.Date;
 @Data
 @Accessors(chain = true)
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true,value = {"password"})
 public class UmsMemberInfo implements Serializable {
     @ApiModelProperty(value = "用户id")
     private Long id;

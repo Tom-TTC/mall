@@ -71,7 +71,7 @@ public class OmsPortalOrderServiceImpl implements OmsPortalOrderService {
      * @param productId
      */
     private PmsPortalProductDetail checkProduct(Long productId) {
-        PmsPortalProductDetail productDetail = productService.detail(productId);
+        PmsPortalProductDetail productDetail = productService.detail( productId);
         return productDetail;
     }
 
@@ -107,11 +107,12 @@ public class OmsPortalOrderServiceImpl implements OmsPortalOrderService {
         OrderDetail orderDetail = new OrderDetail(omsOrder);
 
         //3.填充商品、店铺信息
-        PmsPortalProductDetail productDetail = productService.detail(omsOrder.getProductId());
+        PmsPortalProductDetail productDetail = productService.detail( omsOrder.getProductId());
 
         orderDetail.setProductId(productDetail.getId())
                 .setProductName(productDetail.getName())
-                .setShopName(productDetail.getShopName());
+                .setShopName(productDetail.getShopName())
+                .setAlbumPics(productDetail.getAlbumPics());
 
         return orderDetail;
     }

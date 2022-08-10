@@ -48,6 +48,9 @@ public class PmsPortalProductDetail {
     @ApiModelProperty(value = "佣金比例，0-100之间的整数")
     private Integer rebateRate;
 
+    @ApiModelProperty(value="收藏标志，0->未收藏，1->已收藏")
+    private Integer collected;
+
     @ApiModelProperty(value = "商品链接")
     private String productLink;
 

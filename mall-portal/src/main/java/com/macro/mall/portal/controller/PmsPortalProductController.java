@@ -64,8 +64,9 @@ public class PmsPortalProductController {
 
     @ApiOperation("通过id获取商品详情")
     @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
-    public CommonResult<PmsPortalProductDetail> detail(@PathVariable Long id) {
-        PmsPortalProductDetail productDetail = portalProductService.detail(id);
+    public CommonResult<PmsPortalProductDetail> detail(@PathVariable Long id,Principal principal) {
+        Long memberId = commonService.getLoginUserId(principal);
+        PmsPortalProductDetail productDetail = portalProductService.detailWithCollected(memberId,id);
         return CommonResult.success(productDetail);
     }
 

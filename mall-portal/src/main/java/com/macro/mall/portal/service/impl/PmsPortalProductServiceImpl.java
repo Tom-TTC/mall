@@ -89,9 +89,32 @@ public class PmsPortalProductServiceImpl implements PmsPortalProductService {
 
     @Override
     public PmsPortalProductDetail detail(Long id) {
+        //查询商品详情
         PmsPortalProductDetail result = portalProductDao.getProductDetail(id);
         if (result == null) {
             Asserts.fail(ProductConstant.PRODUCT_NOT_EXISTED);
+        }
+        return result;
+    }
+
+    @Override
+    public PmsPortalProductDetail detailWithCollected(Long memberId, Long id) {
+        //查询商品详情
+        PmsPortalProductDetail result = portalProductDao.getProductDetail(id);
+        if (result == null) {
+            Asserts.fail(ProductConstant.PRODUCT_NOT_EXISTED);
+        }
+
+        //查询是否已收藏
+        UmsMemberFavoriteProductExample example = new UmsMemberFavoriteProductExample();
+        example.createCriteria()
+                .andMemberIdEqualTo(memberId)
+                .andProductIdEqualTo(id);
+        long count = favoriteProductMapper.countByExample(example);
+        if (count == 0) {
+            result.setCollected(0);
+        } else {
+            result.setCollected(1);
         }
         return result;
     }

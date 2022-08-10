@@ -26,9 +26,9 @@ public class UmsMemberReceiveAddressController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
     public CommonResult add(@RequestBody UmsMemberReceiveAddress address) {
-        int count = memberReceiveAddressService.add(address);
-        if (count > 0) {
-            return CommonResult.success(count);
+        long id = memberReceiveAddressService.add(address);
+        if (id > 0) {
+            return CommonResult.success(id);
         }
         return CommonResult.failed();
     }

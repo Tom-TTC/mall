@@ -4,16 +4,19 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class UmsMemberReceiveAddress implements Serializable {
+    @ApiModelProperty(value = "id")
     private Long id;
 
+    @ApiModelProperty(value = "会员id",hidden = true)
     private Long memberId;
 
     @ApiModelProperty(value = "收货人名称")
     private String name;
 
+    @ApiModelProperty(value = "电话号码")
     private String phoneNumber;
 
-    @ApiModelProperty(value = "是否为默认")
+    @ApiModelProperty(value = "是否为默认，0->否，1->是")
     private Integer defaultStatus;
 
     @ApiModelProperty(value = "邮政编码")
