@@ -57,6 +57,9 @@ public class PmsPortalProductDetail {
     @ApiModelProperty(value = "画册图片，连产品图片限制为5张，以逗号分割")
     private String albumPics;
 
+    @ApiModelProperty(value = "直播手卡图片，连产品图片限制为5张，以逗号分割")
+    private String liveStreamPics;
+
     @ApiModelProperty(value = "创建时间")
     private String createTime;
 

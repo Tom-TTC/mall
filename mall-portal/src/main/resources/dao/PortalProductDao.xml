@@ -13,6 +13,7 @@
         <result column="price" jdbcType="DECIMAL" property="price"/>
         <result column="product_link" jdbcType="VARCHAR" property="productLink"/>
         <result column="album_pics" jdbcType="VARCHAR" property="albumPics"/>
+        <result column="pic" jdbcType="VARCHAR" property="liveStreamPics"/>
         <result column="create_user_id" jdbcType="BIGINT" property="createUserId"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>

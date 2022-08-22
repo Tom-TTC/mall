@@ -1,4 +1,4 @@
-package com.macro.mall.utils;
+package com.macro.mall.common.utils;
 
 import java.util.Random;
 
@@ -41,6 +41,23 @@ public class CommonUtils {
 
         for (int i = 0; i < length; i++) {
             sb.append(allChar.charAt(random.nextInt(letterChar.length())));
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 返回一个定长的随机纯数字字符串
+     *
+     * @param length 随机字符串长度
+     * @return 随机字符串
+     */
+    public static String generateNumberString(int length) {
+        StringBuffer sb = new StringBuffer();
+
+        Random random = new Random();
+
+        for (int i = 0; i < length; i++) {
+            sb.append(numberChar.charAt(random.nextInt(numberChar.length())));
         }
         return sb.toString();
     }
@@ -129,7 +146,7 @@ public class CommonUtils {
     }
 
     public static void main(String[] args) {
-        System.out.println(generateString(6));
+        /*System.out.println(generateString(6));
 
         System.out.println(generateMixString(6));
 
@@ -141,7 +158,10 @@ public class CommonUtils {
 
         System.out.println(toFixdLengthString(123, 6));
 
-        System.out.println(toFixdLengthString(123L, 6));
+        System.out.println(toFixdLengthString(123L, 6));*/
+        for (int i = 0; i < 15; i++) {
+            System.out.println(generateNumberString(5));
+        }
 
     }
 }

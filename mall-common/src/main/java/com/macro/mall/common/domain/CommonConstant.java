@@ -43,6 +43,9 @@ public interface CommonConstant {
 
     String AD_NOT_EXIST = "广告不存在";
 
+    String WECHAT_LOGIN_ERROR = "微信登录失败";
+    String WECHAT_USER_FORBIDDEN_ERROR = "会员已禁用，禁止登录";
+
     /**************************其它********************************/
     Random random = new Random();
 

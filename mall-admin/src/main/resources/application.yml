@@ -66,6 +66,7 @@ aliyun:
 minio:
   #endpoint: http://192.168.1.10:9000 #MinIO服务所在地址
   endpoint: http://159.75.125.80:9000 #MinIO服务所在地址
+  returnHost: https://img.xttcr.com
   bucketName: mall #存储桶名称
   accessKey: minioadmin #访问的key
   secretKey: minioadmin #访问的秘钥

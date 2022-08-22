@@ -4,7 +4,7 @@ import com.macro.mall.common.api.CommonResult;
 import com.macro.mall.model.UmsMember;
 import com.macro.mall.portal.domain.vo.UmsMemberHeadRequest;
 import com.macro.mall.portal.domain.vo.UmsMemberInfo;
-import com.macro.mall.portal.domain.vo.UmsMemberPasswordRequest;
+import com.macro.mall.portal.domain.vo.UmsMemberPhoneRequest;
 import com.macro.mall.portal.service.UmsMemberService;
 import com.macro.mall.portal.service.impl.CommonService;
 import io.swagger.annotations.Api;
@@ -46,6 +46,15 @@ public class UmsMemberInfoController {
         UmsMember umsMember = commonService.checkLoginUser(principal);
         memberService.updateHeadIcon(umsMember, headRequest);
         return CommonResult.success(null, "头像更新成功");
+    }
+
+    @ApiOperation("会员号码更新")
+    @RequestMapping(value = "/updatePhone", method = RequestMethod.POST)
+    public CommonResult updatePhone(Principal principal,
+                                    @Valid @RequestBody UmsMemberPhoneRequest phoneRequest) {
+        UmsMember umsMember = commonService.checkLoginUser(principal);
+        memberService.updatePhone(umsMember, phoneRequest);
+        return CommonResult.success(null, "手机号更新成功");
     }
 
 }

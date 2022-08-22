@@ -34,6 +34,7 @@ swagger:
 
 minio:
   endpoint: http://127.0.0.1:9000 #MinIO服务所在地址
-  bucketName: mall #存储桶名称
-  accessKey: minioadmin #访问的key
-  secretKey: minioadmin #访问的秘钥
+  returnHost: https://img.taokepro.cn
+  bucketName: mall-admin #存储桶名称
+  accessKey: Doutuan123 #访问的key
+  secretKey: Doutuan123_picture #访问的秘钥

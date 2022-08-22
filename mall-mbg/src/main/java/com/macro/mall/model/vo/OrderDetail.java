@@ -46,6 +46,9 @@ public class OrderDetail {
     @ApiModelProperty(value = "物流单号")
     private String deliverySn;
 
+    @ApiModelProperty(value = "拒绝寄样原因")
+    private String denyReason;
+
     @ApiModelProperty(value = "收货人姓名")
     private String receiverName;
 
@@ -75,6 +78,7 @@ public class OrderDetail {
                        String wechatAccount,
                        String deliveryCompany,
                        String deliverySn,
+                       String denyReason,
                        String receiverName,
                        String receiverPhone,
                        String receiverDetailAddress,
@@ -87,6 +91,7 @@ public class OrderDetail {
         this.wechatAccount = wechatAccount;
         this.deliveryCompany = deliveryCompany;
         this.deliverySn = deliverySn;
+        this.denyReason = denyReason;
         this.receiverName = receiverName;
         this.receiverPhone = receiverPhone;
         this.receiverDetailAddress = receiverDetailAddress;
@@ -98,7 +103,7 @@ public class OrderDetail {
 
     public OrderDetail(OmsOrder order) {
         this(order.getMemberUsername(), order.getOrderSn(), order.getWechatAccount(), order.getDeliveryCompany(),
-                order.getDeliverySn(), order.getReceiverName(), order.getReceiverPhone(), order.getReceiverDetailAddress(),
+                order.getDeliverySn(), order.getDenyReason(), order.getReceiverName(), order.getReceiverPhone(), order.getReceiverDetailAddress(),
                 order.getStatus(), order.getDeliveryTime(), order.getModifyTime(), order.getCreateTime());
     }
 }

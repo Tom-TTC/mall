@@ -35,3 +35,16 @@ logstash:
 
 swagger:
   show: true
+
+minio:
+  #endpoint: http://192.168.1.10:9000 #MinIO服务所在地址
+  endpoint: http://127.0.0.1:9000 #MinIO服务所在地址
+  returnHost: https://img.taokepro.cn
+  bucketName: mall-portal #存储桶名称
+  accessKey: Doutuan123 #访问的key
+  secretKey: Doutuan123_picture #访问的秘钥
+
+wechat:
+  appId: wx14ccce748ab64987
+  appSecret: 96e1677ee4cf1aadb673dffd339be6b5
+  url: "https://api.weixin.qq.com/sns/jscode2session"

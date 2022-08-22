@@ -18,14 +18,15 @@ import com.macro.mall.model.OmsOrder;
 import com.macro.mall.model.OmsOrderExample;
 import com.macro.mall.model.OmsOrderOperateHistory;
 import com.macro.mall.model.vo.OrderDetail;
-import com.macro.mall.utils.LoginUtils;
 import com.macro.mall.service.OmsOrderService;
+import com.macro.mall.utils.LoginUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -48,6 +49,11 @@ public class OmsOrderServiceImpl implements OmsOrderService {
         //1.填充管理员id（管理员只能查自己商铺的订单，后面超级管理员，再考虑方案）
         Long adminId = LoginUtils.getCurrentLoginUserId();
         queryParam.setAdminId(adminId);
+        if (Objects.equals("4", queryParam.getStatus())) {
+            queryParam.setStatus("2,3");
+        } else if (Objects.equals("-1", queryParam.getStatus())) {
+            queryParam.setStatus(null);
+        }
         PageHelper.startPage(pageNum, pageSize);
         return orderDao.getOrderList(queryParam);
     }
@@ -69,11 +75,14 @@ public class OmsOrderServiceImpl implements OmsOrderService {
                 Asserts.fail(OrderConstant.DELIVERY_SN_INVALID);
             }
             handleParam.setDeliveryTime(DateUtils.getCurrentTime());
+            handleParam.setDenyReason(null);
         } else if (OrderConstant.ORDER_REFUSED == handleParam.getOrderStatus()) {
             //如果拒绝，则拒绝原因不能为空
             if (StringUtils.isEmpty(handleParam.getDenyReason())) {
                 Asserts.fail(OrderConstant.DENY_REASON_INVALID);
             }
+            handleParam.setDeliveryCompany(null);
+            handleParam.setDeliverySn(null);
         }
         //批量发货
         int count = orderDao.delivery(handleParam);

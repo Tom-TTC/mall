@@ -14,8 +14,9 @@
         oms_order
         WHERE
         delete_status = 0
-        <if test="queryParam.status!=null">
-            AND `status` = #{queryParam.status}
+        <if test="queryParam.status!=null and queryParam.status != ''">
+            and
+            find_in_set(`status`, #{queryParam.status})
         </if>
         <if test="queryParam.receiverKeyword!=null and queryParam.receiverKeyword!=''">
             AND (
@@ -35,6 +36,7 @@
         <result column="wechat_account" jdbcType="VARCHAR" property="wechatAccount"/>
         <result column="delivery_company" jdbcType="VARCHAR" property="deliveryCompany"/>
         <result column="delivery_sn" jdbcType="VARCHAR" property="deliverySn"/>
+        <result column="deny_reason" jdbcType="VARCHAR" property="denyReason"/>
         <result column="receiver_name" jdbcType="VARCHAR" property="receiverName"/>
         <result column="receiver_phone" jdbcType="VARCHAR" property="receiverPhone"/>
         <result column="receiver_detail_address" jdbcType="VARCHAR" property="receiverDetailAddress"/>
@@ -62,9 +64,9 @@
         o.admin_id = #{queryParam.adminId}
         and
         o.delete_status = 0
-        <if test="queryParam.status != null and queryParam.status != -1">
+        <if test="queryParam.status != null and queryParam.status != ''">
             and
-            o.status = #{queryParam.status}
+            find_in_set(o.status, #{queryParam.status})
         </if>
 
         <if test="queryParam.receiverKeyword != null and queryParam.receiverKeyword != ''">
@@ -94,15 +96,18 @@
         UPDATE oms_order
         SET
             <if test="handleParam.deliverySn != null and handleParam.deliverySn !=''">
-                delivery_sn      =#{handleParam.deliverySn},
+                delivery_sn = #{handleParam.deliverySn},
             </if>
             <if test="handleParam.deliveryCompany != null and handleParam.deliveryCompany !=''">
-                delivery_company      =#{handleParam.deliveryCompany},
+                delivery_company = #{handleParam.deliveryCompany},
+            </if>
+            <if test="handleParam.denyReason != null and handleParam.denyReason !=''">
+                deny_reason = #{handleParam.denyReason},
             </if>
             <if test="handleParam.deliveryTime != null">
-                delivery_time    =#{handleParam.deliveryTime,jdbcType=TIMESTAMP},
+                delivery_time = #{handleParam.deliveryTime,jdbcType=TIMESTAMP},
             </if>
-            `status`         = #{handleParam.orderStatus}
+            `status` = #{handleParam.orderStatus}
         WHERE order_sn = #{handleParam.orderSn}
           AND `status` = 0
           AND delete_status = 0

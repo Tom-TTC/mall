@@ -11,6 +11,7 @@
         <result column="wechat_account" jdbcType="VARCHAR" property="wechatAccount" />
         <result column="delivery_company" jdbcType="VARCHAR" property="deliveryCompany" />
         <result column="delivery_sn" jdbcType="VARCHAR" property="deliverySn" />
+        <result column="deny_reason" jdbcType="VARCHAR" property="denyReason" />
         <result column="receiver_name" jdbcType="VARCHAR" property="receiverName" />
         <result column="receiver_phone" jdbcType="VARCHAR" property="receiverPhone" />
         <result column="receiver_detail_address" jdbcType="VARCHAR" property="receiverDetailAddress" />

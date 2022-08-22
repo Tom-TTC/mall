@@ -1,9 +1,8 @@
 package com.macro.mall.portal.service;
 
 import com.macro.mall.model.UmsMember;
-import com.macro.mall.portal.domain.vo.UmsMemberHeadRequest;
-import com.macro.mall.portal.domain.vo.UmsMemberInfo;
-import com.macro.mall.portal.domain.vo.UmsMemberPasswordRequest;
+import com.macro.mall.portal.domain.vo.*;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,6 +45,12 @@ public interface UmsMemberService {
     void updateHeadIcon(UmsMember umsMember, UmsMemberHeadRequest headRequest);
 
     /**
+     * 更新头像
+     */
+    @Transactional
+    void updatePhone(UmsMember umsMember, UmsMemberPhoneRequest phoneRequest);
+
+    /**
      * 获取当前登录的用户详情
      *
      * @return
@@ -73,6 +78,14 @@ public interface UmsMemberService {
      * 登录后获取token
      */
     String login(String username, String password);
+
+    /**
+     * 微信登录
+     *
+     * @param loginParam
+     * @return
+     */
+    WechatToken login(WechatLoginParam loginParam);
 
     /**
      * 刷新token
