@@ -72,4 +72,17 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         UmsAdminInfo adminInfo = getAdminByInviteCode(inviteCode);
         return new UmsAdminInfoResponse(adminInfo);
     }
+
+    @Override
+    public UmsAdminInfoResponse getAdminInfoByPhone(String phone) {
+        UmsAdminInfoExample example = new UmsAdminInfoExample();
+        example.createCriteria()
+                .andPhoneEqualTo(phone);
+        List<UmsAdminInfo> adminInfos = adminInfoMapper.selectByExample(example);
+        if (!CollectionUtils.isEmpty(adminInfos)) {
+            return new UmsAdminInfoResponse(adminInfos.get(0));
+        } else {
+            return null;
+        }
+    }
 }

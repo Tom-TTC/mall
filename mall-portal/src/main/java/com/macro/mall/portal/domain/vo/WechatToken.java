@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,5 +15,7 @@ public class WechatToken {
     private String tokenHead;
     @ApiModelProperty(value = "微信openId")
     private String openId;
+    @ApiModelProperty(value = "微信sessionKey")
+    private String sessionKey;
 
 }

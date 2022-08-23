@@ -43,4 +43,7 @@ public class UmsAdminInfoRequest implements Serializable {
     @ApiModelProperty(value = "管理员昵称")
     private String nickname;
 
+    @ApiModelProperty(value = "管理员手机号")
+    private String phone;
+
 }

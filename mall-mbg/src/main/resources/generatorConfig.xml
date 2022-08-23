@@ -67,11 +67,13 @@
         <table tableName="ums_admin_info" domainObjectName="UmsAdminInfo">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
+        <table tableName="ums_member_favorite_product" domainObjectName="UmsMemberFavoriteProduct">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
         <table tableName="ums_cooperation_request" domainObjectName="UmsCooperationRequest">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>-->
-        <table tableName="ums_member_favorite_product" domainObjectName="UmsMemberFavoriteProduct">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        <table tableName="ums_admin_info" domainObjectName="UmsAdminInfo">
         </table>
     </context>
 </generatorConfiguration>

@@ -1,6 +1,7 @@
 package com.macro.mall.portal.controller;
 
 import com.macro.mall.common.api.CommonResult;
+import com.macro.mall.model.UmsMember;
 import com.macro.mall.portal.domain.vo.UmsAdminInfoResponse;
 import com.macro.mall.portal.service.UmsAdminService;
 import com.macro.mall.portal.service.impl.CommonService;
@@ -27,16 +28,24 @@ public class UmsAdminInfoController {
     @Autowired
     private CommonService commonService;
 
-    @ApiOperation(value = "获取当前登录用户业务信息")
+    @ApiOperation(value = "通过邀请码获取团长业务信息")
     @RequestMapping(value = "/business", method = RequestMethod.GET)
-    public CommonResult getAdminBusinessInfo(@RequestParam("inviteCode") String inviteCode,
-                                             Principal principal) {
+    public CommonResult<UmsAdminInfoResponse> getAdminBusinessInfo(@RequestParam("inviteCode") String inviteCode,
+                                                                   Principal principal) {
         commonService.checkLoginUser(principal);
         UmsAdminInfoResponse adminInfo = adminService.getAdminInfo(inviteCode);
         if (adminInfo != null) {
             return CommonResult.success(adminInfo);
         }
         return CommonResult.failed();
+    }
+
+    @ApiOperation(value = "判断当前登录用户是否为团长（有邀请码返回为团长）")
+    @RequestMapping(value = "/inviteCode", method = RequestMethod.GET)
+    public CommonResult<UmsAdminInfoResponse> getAdminInviteCode(Principal principal) {
+        UmsMember member = commonService.checkLoginUser(principal);
+        UmsAdminInfoResponse adminInfo = adminService.getAdminInfoByPhone(member.getPhone());
+        return CommonResult.success(adminInfo);
     }
 
 }

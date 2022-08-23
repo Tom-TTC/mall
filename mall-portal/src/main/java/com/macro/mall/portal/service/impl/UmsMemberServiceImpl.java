@@ -283,7 +283,7 @@ public class UmsMemberServiceImpl implements UmsMemberService {
             Asserts.fail(CommonConstant.WECHAT_LOGIN_ERROR);
         }
 
-        return new WechatToken(token, tokenHead, wechatSession.getOpenid());
+        return new WechatToken(token, tokenHead, wechatSession.getOpenid(),wechatSession.getSession_key());
     }
 
     @Transactional

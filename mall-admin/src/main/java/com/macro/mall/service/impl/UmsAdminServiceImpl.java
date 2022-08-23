@@ -110,6 +110,9 @@ public class UmsAdminServiceImpl implements UmsAdminService {
             Asserts.fail(CommonConstant.INVITE_CODE_ERROR);
         }
 
+        //校验手机号是否已经占用
+        checkPhoneUsed(umsAdminParam.getPhone());
+
         //插入团长账号
         UmsAdmin umsAdmin = new UmsAdmin(umsAdminParam.getUsername(),
                 umsAdminParam.getPassword(),
@@ -134,7 +137,8 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         UmsAdminInfoRequest request = new UmsAdminInfoRequest()
                 .setId(umsAdmin.getId())
                 .setUsername(umsAdmin.getUsername())
-                .setNickname(umsAdmin.getUsername());
+                .setNickname(umsAdmin.getUsername())
+                .setPhone(umsAdminParam.getPhone());
         this.saveAdminInfo(request);
 
         //增加邀请记录
@@ -148,13 +152,28 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         inviteRecordService.addInviteRecord(inviteRecord);
 
         //增加邀请人的积分
-        adminInfoDao.incUserRewardPoint(adminInfos.get(0).getId(),rewardPointAdded);
+        adminInfoDao.incUserRewardPoint(adminInfos.get(0).getId(), rewardPointAdded);
         /*UmsAdminInfoRequest rewardPointRequest = new UmsAdminInfoRequest()
                 .setId(adminInfos.get(0).getId())
                 .setRewardPoint(rewardPointAdded);
         updateAdminRewardPoint(rewardPointRequest);*/
 
         return umsAdmin.getId();
+    }
+
+    /**
+     * 校验手机号是否已经占用
+     *
+     * @param phone
+     */
+    private void checkPhoneUsed(String phone) {
+        UmsAdminInfoExample adminInfoExample = new UmsAdminInfoExample();
+        adminInfoExample.createCriteria()
+                .andPhoneEqualTo(phone);
+        List<UmsAdminInfo> tempAdminInfos = adminInfoMapper.selectByExample(adminInfoExample);
+        if (!CollectionUtils.isEmpty(tempAdminInfos)) {
+            Asserts.fail(CommonConstant.PHONE_NUMBER_USED_ERROR);
+        }
     }
 
 
@@ -354,7 +373,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     public Long saveAdminInfo(UmsAdminInfoRequest request) {
         String inviteCode = null;
         UmsAdminInfoExample adminInfoExample = null;
-        long count = 0;
+        long count;
         for (int i = 0; i < 3; i++) {
             inviteCode = CommonUtils.generateMixString(6);
             adminInfoExample = new UmsAdminInfoExample();
@@ -373,6 +392,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
                 rewardPoint,
                 request.getIntro(),
                 request.getUsername(),
+                request.getPhone(),
                 request.getSkilledDomain(),
                 request.getHeadIcon(),
                 request.getNickname());
@@ -383,8 +403,15 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     @Override
     @Transactional
     public Long updateAdminInfo(UmsAdminInfoRequest request) {
+        //手机号校验
+        if (!StringUtils.isEmpty(request.getPhone())) {
+            checkPhoneUsed(request.getPhone());
+        }
+
+        //更新信息
         UmsAdminInfo adminInfo = new UmsAdminInfo(request.getId(),
                 StringUtils.isEmpty(request.getIntro()) ? null : request.getIntro(),
+                StringUtils.isEmpty(request.getPhone()) ? null : request.getPhone(),
                 StringUtils.isEmpty(request.getSkilledDomain()) ? null : request.getSkilledDomain(),
                 StringUtils.isEmpty(request.getHeadIcon()) ? null : request.getHeadIcon(),
                 StringUtils.isEmpty(request.getNickname()) ? null : request.getNickname()

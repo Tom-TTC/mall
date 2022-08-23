@@ -21,8 +21,18 @@ public interface UmsAdminService {
     /**
      * 查询团长信息
      *
-     * @param adminId
+     * @param inviteCode
      * @return
      */
-    public UmsAdminInfoResponse getAdminInfo(String inviteCode);
+    UmsAdminInfoResponse getAdminInfo(String inviteCode);
+
+    /**
+     * 根据手机号查询团长信息
+     *
+     * @param phone
+     * @return
+     */
+    UmsAdminInfoResponse getAdminInfoByPhone(String phone);
+
+
 }

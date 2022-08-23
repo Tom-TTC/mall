@@ -7,6 +7,7 @@
     <result column="reward_point" jdbcType="INTEGER" property="rewardPoint" />
     <result column="intro" jdbcType="VARCHAR" property="intro" />
     <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="skilled_domain" jdbcType="VARCHAR" property="skilledDomain" />
     <result column="head_icon" jdbcType="VARCHAR" property="headIcon" />
     <result column="nickname" jdbcType="VARCHAR" property="nickname" />
@@ -70,7 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, invite_code, reward_point, intro, username, skilled_domain, head_icon, nickname
+    id, invite_code, reward_point, intro, username, phone, skilled_domain, head_icon, 
+    nickname
   </sql>
   <select id="selectByExample" parameterType="com.macro.mall.model.UmsAdminInfoExample" resultMap="BaseResultMap">
     select
@@ -104,11 +106,13 @@
   </delete>
   <insert id="insert" parameterType="com.macro.mall.model.UmsAdminInfo">
     insert into ums_admin_info (id, invite_code, reward_point, 
-      intro, username, skilled_domain, 
-      head_icon, nickname)
+      intro, username, phone, 
+      skilled_domain, head_icon, nickname
+      )
     values (#{id,jdbcType=BIGINT}, #{inviteCode,jdbcType=VARCHAR}, #{rewardPoint,jdbcType=INTEGER}, 
-      #{intro,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{skilledDomain,jdbcType=VARCHAR}, 
-      #{headIcon,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR})
+      #{intro,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{skilledDomain,jdbcType=VARCHAR}, #{headIcon,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.macro.mall.model.UmsAdminInfo">
     insert into ums_admin_info
@@ -127,6 +131,9 @@
       </if>
       <if test="username != null">
         username,
+      </if>
+      <if test="phone != null">
+        phone,
       </if>
       <if test="skilledDomain != null">
         skilled_domain,
@@ -153,6 +160,9 @@
       </if>
       <if test="username != null">
         #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
       </if>
       <if test="skilledDomain != null">
         #{skilledDomain,jdbcType=VARCHAR},
@@ -189,6 +199,9 @@
       <if test="record.username != null">
         username = #{record.username,jdbcType=VARCHAR},
       </if>
+      <if test="record.phone != null">
+        phone = #{record.phone,jdbcType=VARCHAR},
+      </if>
       <if test="record.skilledDomain != null">
         skilled_domain = #{record.skilledDomain,jdbcType=VARCHAR},
       </if>
@@ -210,6 +223,7 @@
       reward_point = #{record.rewardPoint,jdbcType=INTEGER},
       intro = #{record.intro,jdbcType=VARCHAR},
       username = #{record.username,jdbcType=VARCHAR},
+      phone = #{record.phone,jdbcType=VARCHAR},
       skilled_domain = #{record.skilledDomain,jdbcType=VARCHAR},
       head_icon = #{record.headIcon,jdbcType=VARCHAR},
       nickname = #{record.nickname,jdbcType=VARCHAR}
@@ -232,6 +246,9 @@
       <if test="username != null">
         username = #{username,jdbcType=VARCHAR},
       </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
       <if test="skilledDomain != null">
         skilled_domain = #{skilledDomain,jdbcType=VARCHAR},
       </if>
@@ -250,6 +267,7 @@
       reward_point = #{rewardPoint,jdbcType=INTEGER},
       intro = #{intro,jdbcType=VARCHAR},
       username = #{username,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
       skilled_domain = #{skilledDomain,jdbcType=VARCHAR},
       head_icon = #{headIcon,jdbcType=VARCHAR},
       nickname = #{nickname,jdbcType=VARCHAR}

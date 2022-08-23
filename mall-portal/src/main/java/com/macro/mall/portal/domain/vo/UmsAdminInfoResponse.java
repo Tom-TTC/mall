@@ -21,6 +21,9 @@ public class UmsAdminInfoResponse implements Serializable {
     @ApiModelProperty(value = "管理员账号名")
     private String username;
 
+    @ApiModelProperty(value = "管理员手机号")
+    private String phone;
+
     @ApiModelProperty(value = "擅长领域，逗号隔开")
     private String skilledDomain;
 
@@ -34,6 +37,7 @@ public class UmsAdminInfoResponse implements Serializable {
         this(request.getInviteCode(),
                 request.getIntro(),
                 request.getUsername(),
+                request.getPhone(),
                 request.getSkilledDomain(),
                 request.getHeadIcon(),
                 request.getNickname());

@@ -35,6 +35,8 @@ public interface CommonConstant {
 
     String INVITE_CODE_ERROR = "邀请码无效";
 
+    String PHONE_NUMBER_USED_ERROR = "手机号已经占用，不可重复使用";
+
     String POINT_NOT_ENOUGH = "积分不够，请联系客服进行充值";
 
     String FAVORITE_PRODUCT_ALREADY_ADDED = "产品已收藏，不可重复操作";

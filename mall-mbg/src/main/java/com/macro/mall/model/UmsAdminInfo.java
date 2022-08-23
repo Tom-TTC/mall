@@ -29,6 +29,9 @@ public class UmsAdminInfo implements Serializable {
     @ApiModelProperty(value = "管理员账号名称")
     private String username;
 
+    @ApiModelProperty(value = "管理员手机号")
+    private String phone;
+
     @ApiModelProperty(value = "擅长领域，逗号隔开")
     private String skilledDomain;
 
@@ -38,9 +41,10 @@ public class UmsAdminInfo implements Serializable {
     @ApiModelProperty(value = "管理员昵称")
     private String nickname;
 
-    public UmsAdminInfo(Long id, String intro, String skilledDomain, String headIcon, String nickname) {
+    public UmsAdminInfo(Long id, String intro, String phone, String skilledDomain, String headIcon, String nickname) {
         this.id = id;
         this.intro = intro;
+        this.phone = phone;
         this.skilledDomain = skilledDomain;
         this.headIcon = headIcon;
         this.nickname = nickname;

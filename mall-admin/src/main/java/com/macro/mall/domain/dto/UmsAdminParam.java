@@ -3,6 +3,7 @@ package com.macro.mall.domain.dto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -27,8 +28,13 @@ public class UmsAdminParam {
     @NotBlank(message = "邀请码不能为空")
     private String inviteCode;
 
+    @ApiModelProperty(value = "团长手机号", required = true)
+    @NotBlank(message = "手机号不能为空")
+    @Length(message = "手机号无效，必须是11位号码", min = 11, max = 11)
+    private String phone;
+
     @Email
-    @ApiModelProperty(value = "邮箱",hidden = true)
+    @ApiModelProperty(value = "邮箱", hidden = true)
     private String email;
 
 }
