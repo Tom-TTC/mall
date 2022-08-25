@@ -50,7 +50,7 @@ public class OmsOrderServiceImpl implements OmsOrderService {
         Long adminId = LoginUtils.getCurrentLoginUserId();
         queryParam.setAdminId(adminId);
         if (Objects.equals("4", queryParam.getStatus())) {
-            queryParam.setStatus("2,3");
+            queryParam.setStatus("1,2");
         } else if (Objects.equals("-1", queryParam.getStatus())) {
             queryParam.setStatus(null);
         }
