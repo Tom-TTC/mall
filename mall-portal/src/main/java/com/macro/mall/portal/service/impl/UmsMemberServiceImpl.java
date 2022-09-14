@@ -211,6 +211,8 @@ public class UmsMemberServiceImpl implements UmsMemberService {
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
             token = jwtTokenUtil.generateToken(userDetails);
+            //清除缓存
+            memberCacheService.delMemberByUsername(username);
         } catch (AuthenticationException e) {
             LOGGER.warn("登录异常:{}", e.getMessage());
         }
@@ -282,6 +284,9 @@ public class UmsMemberServiceImpl implements UmsMemberService {
             log.info("获取token失败");
             Asserts.fail(CommonConstant.WECHAT_LOGIN_ERROR);
         }
+
+        //3.4 删除缓存
+        memberCacheService.delMemberByUsername(wechatSession.getOpenid());
 
         return new WechatToken(token, tokenHead, wechatSession.getOpenid(),wechatSession.getSession_key());
     }

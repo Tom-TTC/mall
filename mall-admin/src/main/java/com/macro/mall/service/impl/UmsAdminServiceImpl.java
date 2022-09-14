@@ -111,7 +111,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         }
 
         //校验手机号是否已经占用
-        checkPhoneUsed(umsAdminParam.getPhone());
+        checkPhoneUsed(null, umsAdminParam.getPhone());
 
         //插入团长账号
         UmsAdmin umsAdmin = new UmsAdmin(umsAdminParam.getUsername(),
@@ -164,12 +164,16 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     /**
      * 校验手机号是否已经占用
      *
+     * @param id
      * @param phone
      */
-    private void checkPhoneUsed(String phone) {
+    private void checkPhoneUsed(Long id, String phone) {
         UmsAdminInfoExample adminInfoExample = new UmsAdminInfoExample();
-        adminInfoExample.createCriteria()
+        UmsAdminInfoExample.Criteria criteria = adminInfoExample.createCriteria()
                 .andPhoneEqualTo(phone);
+        if (id != null) {
+            criteria.andIdNotEqualTo(id);
+        }
         List<UmsAdminInfo> tempAdminInfos = adminInfoMapper.selectByExample(adminInfoExample);
         if (!CollectionUtils.isEmpty(tempAdminInfos)) {
             Asserts.fail(CommonConstant.PHONE_NUMBER_USED_ERROR);
@@ -405,7 +409,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     public Long updateAdminInfo(UmsAdminInfoRequest request) {
         //手机号校验
         if (!StringUtils.isEmpty(request.getPhone())) {
-            checkPhoneUsed(request.getPhone());
+            checkPhoneUsed(request.getId(), request.getPhone());
         }
 
         //更新信息

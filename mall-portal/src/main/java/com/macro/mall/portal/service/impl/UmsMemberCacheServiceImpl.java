@@ -34,9 +34,14 @@ public class UmsMemberCacheServiceImpl implements UmsMemberCacheService {
     public void delMember(Long memberId) {
         UmsMember umsMember = memberMapper.selectByPrimaryKey(memberId);
         if (umsMember != null) {
-            String key = REDIS_DATABASE + ":" + REDIS_KEY_MEMBER + ":" + umsMember.getUsername();
-            redisService.del(key);
+            delMemberByUsername(umsMember.getUsername());
         }
+    }
+
+    @Override
+    public void delMemberByUsername(String username) {
+        String key = REDIS_DATABASE + ":" + REDIS_KEY_MEMBER + ":" + username;
+        redisService.del(key);
     }
 
     @Override
